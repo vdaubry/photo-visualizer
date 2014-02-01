@@ -1,39 +1,33 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Image -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
 
-<p>
-  <strong>Key:</strong>
-  <%= @image.key %>
-</p>
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:key) %>:</strong></dt>
+  <dd><%= @image.key %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:hash) %>:</strong></dt>
+  <dd><%= @image.hash %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:statut) %>:</strong></dt>
+  <dd><%= @image.statut %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:file_size) %>:</strong></dt>
+  <dd><%= @image.file_size %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:width) %>:</strong></dt>
+  <dd><%= @image.width %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:height) %>:</strong></dt>
+  <dd><%= @image.height %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:source_url) %>:</strong></dt>
+  <dd><%= @image.source_url %></dd>
+</dl>
 
-<p>
-  <strong>Hash:</strong>
-  <%= @image.hash %>
-</p>
-
-<p>
-  <strong>Statut:</strong>
-  <%= @image.statut %>
-</p>
-
-<p>
-  <strong>File size:</strong>
-  <%= @image.file_size %>
-</p>
-
-<p>
-  <strong>Width:</strong>
-  <%= @image.width %>
-</p>
-
-<p>
-  <strong>Height:</strong>
-  <%= @image.height %>
-</p>
-
-<p>
-  <strong>Source url:</strong>
-  <%= @image.source_url %>
-</p>
-
-<%= link_to 'Edit', edit_image_path(@image) %> |
-<%= link_to 'Back', images_path %>
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              images_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_image_path(@image), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              image_path(@image),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

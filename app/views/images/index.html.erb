@@ -1,9 +1,15 @@
-<%- model_class = Image -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <h1>Images</h1>
 </div>
 <% @images.each do |image| %>
   <div class="span3 list_image">
+  	<div>
+  		<p>
+		  <button class="btn btn-small btn-success icon-ok" type="button"></button>
+		  <button class="btn btn-small btn-danger icon-remove" type="button"></button>
+		</p>
+	</div>
+  	
     <span class="helper"></span><%= image_tag "to_sort/thumbnails/300/"+image.key %>
   </div>
 <% end %>

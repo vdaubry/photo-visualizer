@@ -8,13 +8,13 @@ namespace :scrapping do
 
   	url = YAML.load_file('config/websites.yml')["website1"]["url"]
 
-  	last_scrapping = Scrapping.where(:success => true, :website => url).desc(:date).limit(1).first
+  	last_scrapping = Scrapping.where(:success => true, :website => url).asc(:date).limit(1).first
   	previous_month = 1.month.ago
   	if last_scrapping
   		previous_month = (last_scrapping.date - 1.month)
   	end
 
-  	scrapping = Scrapping.new(:date => previous_month, :website => url, :success => false).upsert
+  	scrapping = Scrapping.find_or_initialize_by(:date => previous_month, :website => url, :success => false)
   	start_time = DateTime.now
 	    
     user = YAML.load_file('config/websites.yml')["website1"]["username"]
@@ -39,10 +39,10 @@ namespace :scrapping do
   	end
 
   	scrapping.update_attributes(
-	  success: true,
-	  duration: DateTime.now-start_time,
-	  image_count: images_saved
-	)
+  	  success: true,
+  	  duration: DateTime.now-start_time,
+  	  image_count: images_saved
+  	)
 
   end
 
@@ -54,7 +54,7 @@ namespace :scrapping do
    	page = page.link_with(:text => previous_month.strftime("%B")).click
 
    	link_reg_exp = YAML.load_file('config/websites.yml')["website1"]["link_reg_exp"]
-   	links = page.links_with(:href => %r{img_reg_exp})[0..1]
+   	links = page.links_with(:href => %r{#{link_reg_exp}})[0..1]
    	pp "Found #{links.count} links" 
    	images_saved = 0
    	links.each do |link|
@@ -68,13 +68,18 @@ namespace :scrapping do
    			pp "Save #{filename}"
 	   		file_path = "tmp/#{filename}"
 	   		open(file_path, 'wb') do |file|
-			  file << open(url).read
-			end
+			   file << open(url).read
+        end
 
-			Image.create(:key => filename, :width => FastImage.size(file_path)[0], :height => FastImage.size(file_path)[1], :source_url => url)
-			images_saved+=1
-			sleep(1)
-   		end
+        FileUtils.mkdir_p 'tmp/thumbnails/300'
+        image = MiniMagick::Image.open(file_path) 
+        image.resize "300x300"
+        image.write  "tmp/thumbnails/300/mini_#{filename}"
+
+        Image.create(:key => filename, :width => FastImage.size(file_path)[0], :height => FastImage.size(file_path)[1], :source_url => url)
+        images_saved+=1
+        sleep(1)
+			end
    	end
    	images_saved
   end

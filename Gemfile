@@ -30,6 +30,7 @@ gem 'mongoid', git: 'git://github.com/mongoid/mongoid.git'
 
 gem 'mechanize'
 gem 'fastimage'
+gem 'mini_magick', '~> 3.7.0'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

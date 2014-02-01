@@ -2,9 +2,20 @@
 
 namespace :scrapping do
 
+    desc "Scrap websites in websites.yml"
+    task :reset  => :environment do
+      Image.delete_all
+      Scrapping.delete_all
+      FileUtils.rm_rf('app/assets/images/to_sort')
+      FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
+      FileUtils.cp 'lib/calinours_mini.jpg', 'app/assets/images/to_sort/thumbnails/300/calinours.jpg'
+      FileUtils.cp 'lib/calinours.jpg', 'app/assets/images/to_sort/calinours.jpg'
+    end
+
   desc "Scrap websites in websites.yml"
   task :website1  => :environment do
   	require 'open-uri'
+    require 'digest/md5'
 
   	url = YAML.load_file('config/websites.yml')["website1"]["url"]
 
@@ -63,20 +74,28 @@ namespace :scrapping do
    		url = page_image.url.to_s
 
    		filename =  DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(url).path)
+      FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
 
    		if Image.where(:source_url => url).first.nil?
    			pp "Save #{filename}"
-	   		file_path = "tmp/#{filename}"
+	   		file_path = "app/assets/images/to_sort/#{filename}"
 	   		open(file_path, 'wb') do |file|
 			   file << open(url).read
         end
-
-        FileUtils.mkdir_p 'tmp/thumbnails/300'
+        
         image = MiniMagick::Image.open(file_path) 
         image.resize "300x300"
-        image.write  "tmp/thumbnails/300/mini_#{filename}"
+        image.write  "app/assets/images/to_sort/thumbnails/300/#{filename}"
 
-        Image.create(:key => filename, :width => FastImage.size(file_path)[0], :height => FastImage.size(file_path)[1], :source_url => url)
+        image_file = File.read(file_path)
+
+        Image.create(:key => filename, 
+          :image_hash => Digest::MD5.hexdigest(image_file),
+          :width => FastImage.size(file_path)[0], 
+          :height => FastImage.size(file_path)[1],
+          :file_size => image_file.size,
+          :source_url => url, 
+          :status => Image::TO_SORT_STATUS)
         images_saved+=1
         sleep(1)
 			end

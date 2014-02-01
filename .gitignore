@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 websites.yml
+app/assets/images/to_sort/*
 
 # Ignore bundler config.
 /.bundle

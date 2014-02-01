@@ -13,8 +13,8 @@ describe Scrapping do
 		context "duplicates url and date" do 
 			it { 
 				date = 1.day.ago
-				FactoryGirl.create(:scrapping, :date => date, :website => "toto", :success => true)
-				FactoryGirl.build(:scrapping, :date => date, :website => "toto", :success => false).save.should == false 
+				FactoryGirl.create(:scrapping, :date => date, :website => "foo", :success => true)
+				FactoryGirl.build(:scrapping, :date => date, :website => "foo", :success => false).save.should == false 
 			}
 		end
 

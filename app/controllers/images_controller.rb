@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    @images = Image.all
+    @images = Image.where(:status => Image::TO_SORT_STATUS).page(params[:page])
   end
 
   # GET /images/1

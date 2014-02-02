@@ -10,6 +10,9 @@ namespace :scrapping do
       FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
       FileUtils.cp 'lib/calinours_mini.jpg', 'app/assets/images/to_sort/thumbnails/300/calinours.jpg'
       FileUtils.cp 'lib/calinours.jpg', 'app/assets/images/to_sort/calinours.jpg'
+
+      FileUtils.rm_rf('ressources')
+      FileUtils.mkdir_p 'ressources/to_delete/thumbnails/300'
     end
 
   desc "Scrap websites in websites.yml"

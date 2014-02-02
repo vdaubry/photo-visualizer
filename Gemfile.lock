@@ -8,6 +8,13 @@ GIT
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
 
+GIT
+  remote: git://github.com/rusanu/blockuijs-rails.git
+  revision: 5deb1d36a861327dd54002d559fcd0e6197a3c83
+  specs:
+    blockuijs-rails (0.1.0)
+      rails (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -185,6 +192,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  blockuijs-rails!
   coffee-rails (~> 4.0.0)
   factory_girl_rails
   fastimage

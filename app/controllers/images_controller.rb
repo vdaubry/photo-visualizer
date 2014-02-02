@@ -38,28 +38,38 @@ class ImagesController < ApplicationController
   end
 
   # PATCH/PUT /images/1
-  # PATCH/PUT /images/1.json
   def update
-    respond_to do |format|
-      if @image.update(image_params)
-        format.html { redirect_to @image, notice: 'Image was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
+    FileUtils.mv "app/assets/images/to_sort/#{@image.key}", "ressources/to_keep/#{@image.key}"
+    FileUtils.mv "app/assets/images/to_sort/thumbnails/300/#{@image.key}", "ressources/to_keep/thumbnails/300/#{@image.key}"
+    @image.update_attributes(
+      status: Image::TO_KEEP_STATUS,
+    )
+
   end
 
   # DELETE /images/1
-  # DELETE /images/1.json
   def destroy
-    @image.destroy
-    respond_to do |format|
-      format.html { redirect_to images_url }
-      format.json { head :no_content }
-    end
+    FileUtils.mv "app/assets/images/to_sort/#{@image.key}", "ressources/to_delete/#{@image.key}"
+    FileUtils.mv "app/assets/images/to_sort/thumbnails/300/#{@image.key}", "ressources/to_delete/thumbnails/300/#{@image.key}"
+    @image.update_attributes(
+      status: Image::TO_DELETE_STATUS,
+    )
   end
+
+  # DELETE /images/
+  def destroy_all
+    Image.where(:_id.in => params["image"]["ids"]).each do |image|
+      if(File.exist?("app/assets/images/to_sort/#{image.key}"))
+        FileUtils.mv "app/assets/images/to_sort/#{image.key}", "ressources/to_delete/#{image.key}"
+        FileUtils.mv "app/assets/images/to_sort/thumbnails/300/#{image.key}", "ressources/to_delete/thumbnails/300/#{image.key}"
+      end
+      image.update_attributes(
+        status: Image::TO_DELETE_STATUS,
+      )
+    end
+
+    redirect_to images_url
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -69,6 +79,6 @@ class ImagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def image_params
-      params.require(:image).permit(:key, :hash, :statut, :file_size, :width, :height, :source_url)
+      params.permit(:id)
     end
 end

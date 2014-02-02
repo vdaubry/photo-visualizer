@@ -1,19 +1,35 @@
 <div class="page-header">
   <h1>Images</h1>
 </div>
-<% @images.each do |image| %>
-  <div class="span3 list_image">
-  	<div>
-  		<p>
-		  <button class="btn btn-small btn-success icon-ok" type="button"></button>
-		  <button class="btn btn-small btn-danger icon-remove" type="button"></button>
-		</p>
-	</div>
-  	
-    <span class="helper"></span><%= image_tag "to_sort/thumbnails/300/"+image.key %>
+
+<div class="span12">
+  <div class="span2">
+    <div class="well sidebar-nav">
+      <ul class="nav nav-list">
+        <li class="nav-header">Sidebar</li>
+        <li><%= link_to "Delete All remaining images", "#", :id => "destroy_all_link", :remote => true %></li>
+      </ul>
+    </div><!--/.well -->
+  </div><!--/span-->
+  <div class="span10">
+    <% @images.each do |image| %>
+      <div class="span3 list_image" id="<%=image.id%>">
+        <div>
+          <p>
+          <%= link_to raw("<i class=\"icon-ok\"></i>"), image, :method => :put, :class => "btn btn-small btn-success", remote: true %>
+          <%= link_to raw("<i class=\"icon-remove\"></i>"), image, :method => :delete, :class => "btn btn-small btn-danger", remote: true %>
+        </p>
+      </div>
+        
+        <span class="helper"></span><%= image_tag "to_sort/thumbnails/300/"+image.key %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
 
 <div class="clearfix"></div>
 
 <%= paginate @images %>
+
+<!-- Destroy all images form -->
+<%= form_tag(destroy_all_images_path, method: :delete, :id => "destroy_all_form") %>

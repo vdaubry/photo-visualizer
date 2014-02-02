@@ -15,7 +15,7 @@ class Image
   validates :key, :image_hash, :status, :file_size, :width, :height, :source_url, presence: true, allow_blank: false, allow_nil: false
   validates_inclusion_of :status, in: [ TO_KEEP_STATUS, TO_SORT_STATUS, TO_DELETE_STATUS ]
 
-  def key
-    Rails.env.development? ? "calinours.jpg" : key
-  end
+  # def key
+  #   Rails.env.development? ? "calinours.jpg" : key
+  # end
 end

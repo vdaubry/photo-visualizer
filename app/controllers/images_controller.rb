@@ -4,7 +4,19 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    @images = Image.where(:status => Image::TO_SORT_STATUS).page(params[:page])
+    @to_sort_count = Image.where(:status => Image::TO_SORT_STATUS).count
+    @to_keep_count = Image.where(:status => Image::TO_KEEP_STATUS).count
+    @to_delete_count = Image.where(:status => Image::TO_DELETE_STATUS).count
+
+
+    @images = Image.where(:status => status).page(params[:page])
+
+    if status==Image::TO_SORT_STATUS
+      @images = @images.asc(:created_at)
+    else 
+      @images = @images.desc(:updated_at)
+    end
+    
   end
 
   # GET /images/1
@@ -39,34 +51,24 @@ class ImagesController < ApplicationController
 
   # PATCH/PUT /images/1
   def update
-    FileUtils.mv "app/assets/images/to_sort/#{@image.key}", "ressources/to_keep/#{@image.key}"
-    FileUtils.mv "app/assets/images/to_sort/thumbnails/300/#{@image.key}", "ressources/to_keep/thumbnails/300/#{@image.key}"
     @image.update_attributes(
-      status: Image::TO_KEEP_STATUS,
+      status: Image::TO_KEEP_STATUS
     )
 
   end
 
   # DELETE /images/1
   def destroy
-    FileUtils.mv "app/assets/images/to_sort/#{@image.key}", "ressources/to_delete/#{@image.key}"
-    FileUtils.mv "app/assets/images/to_sort/thumbnails/300/#{@image.key}", "ressources/to_delete/thumbnails/300/#{@image.key}"
     @image.update_attributes(
-      status: Image::TO_DELETE_STATUS,
+      status: Image::TO_DELETE_STATUS
     )
   end
 
   # DELETE /images/
   def destroy_all
-    Image.where(:_id.in => params["image"]["ids"]).each do |image|
-      if(File.exist?("app/assets/images/to_sort/#{image.key}"))
-        FileUtils.mv "app/assets/images/to_sort/#{image.key}", "ressources/to_delete/#{image.key}"
-        FileUtils.mv "app/assets/images/to_sort/thumbnails/300/#{image.key}", "ressources/to_delete/thumbnails/300/#{image.key}"
-      end
-      image.update_attributes(
-        status: Image::TO_DELETE_STATUS,
+    Image.where(:_id.in => params["image"]["ids"]).update_all(
+        status: Image::TO_DELETE_STATUS
       )
-    end
 
     redirect_to images_url
   end  

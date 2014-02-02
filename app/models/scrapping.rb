@@ -1,5 +1,6 @@
 class Scrapping
   include Mongoid::Document
+  include Mongoid::Timestamps
   field :date, type: Time
   field :duration, type: Integer
   field :website, type: String

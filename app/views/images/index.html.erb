@@ -7,7 +7,13 @@
     <div class="well sidebar-nav">
       <ul class="nav nav-list">
         <li class="nav-header">Sidebar</li>
-        <li><%= link_to "Delete All remaining images", "#", :id => "destroy_all_link", :remote => true %></li>
+        <li class="link"><%= link_to "Delete All remaining images", "#", :id => "destroy_all_link", :remote => true %></li>
+        <li class="link"><%= link_to "Images to sort", images_path(:status => Image::TO_SORT_STATUS) %></li>
+        <li class="title"><span class="badge"><%=@to_sort_count%></span></li>
+        <li class="link"><%= link_to "Images to keep", images_path(:status => Image::TO_KEEP_STATUS) %></li>
+        <li class="title"><span class="badge badge-success"><%=@to_keep_count%></span></li>
+        <li class="link"><%= link_to "Images to delete", images_path(:status => Image::TO_DELETE_STATUS) %></li>
+        <li class="title"><span class="badge badge-important"><%=@to_delete_count%></span></li>
       </ul>
     </div><!--/.well -->
   </div><!--/span-->
@@ -29,7 +35,11 @@
 
 <div class="clearfix"></div>
 
+<% if (params["status"] != Image::TO_SORT_STATUS) %>
 <%= paginate @images %>
+<% else %>
+<%= link_to "Delete All remaining images", "#", :id => "destroy_all_link", :class => "btn btn-large btn-danger", :remote => true %>
+<% end %>
 
 <!-- Destroy all images form -->
 <%= form_tag(destroy_all_images_path, method: :delete, :id => "destroy_all_form") %>

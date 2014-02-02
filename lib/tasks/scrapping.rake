@@ -12,7 +12,8 @@ namespace :scrapping do
       FileUtils.cp 'lib/calinours.jpg', 'app/assets/images/to_sort/calinours.jpg'
 
       FileUtils.rm_rf('ressources')
-      FileUtils.mkdir_p 'ressources/to_delete/thumbnails/300'
+      FileUtils.mkdir_p 'ressources/to_delete'
+      FileUtils.mkdir_p 'ressources/to_keep'
     end
 
   desc "Scrap websites in websites.yml"
@@ -68,7 +69,7 @@ namespace :scrapping do
    	page = page.link_with(:text => previous_month.strftime("%B")).click
 
    	link_reg_exp = YAML.load_file('config/websites.yml')["website1"]["link_reg_exp"]
-   	links = page.links_with(:href => %r{#{link_reg_exp}})[0..1]
+   	links = page.links_with(:href => %r{#{link_reg_exp}})#[0..1]
    	pp "Found #{links.count} links" 
    	images_saved = 0
    	links.each do |link|

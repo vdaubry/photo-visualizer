@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).on('ready page:load', function () {
 	$('#destroy_all_link').click(function(){ 
 		
 		$('.list_image').each(function( index ) {

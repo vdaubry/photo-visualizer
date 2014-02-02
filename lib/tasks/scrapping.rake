@@ -12,7 +12,6 @@ namespace :scrapping do
       FileUtils.cp 'lib/calinours.jpg', 'app/assets/images/to_sort/calinours.jpg'
 
       FileUtils.rm_rf('ressources')
-      FileUtils.mkdir_p 'ressources/to_delete'
       FileUtils.mkdir_p 'ressources/to_keep'
     end
 

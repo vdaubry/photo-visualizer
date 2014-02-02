@@ -1,4 +1,6 @@
 PhotoVisualizer::Application.routes.draw do
+  resources :websites
+
   root 'images#index'
   
   resources :images do

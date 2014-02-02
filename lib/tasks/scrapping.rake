@@ -22,13 +22,15 @@ namespace :scrapping do
 
   	url = YAML.load_file('config/websites.yml')["website1"]["url"]
 
-  	last_scrapping = Scrapping.where(:success => true, :website => url).asc(:date).limit(1).first
-  	previous_month = 1.month.ago
+    website = Website.where(:url => url).first
+
+  	last_scrapping = Scrapping.where(:success => true, :website => website).asc(:date).limit(1).first
+  	previous_month = 1.month.ago.beginning_of_month
   	if last_scrapping
-  		previous_month = (last_scrapping.date - 1.month)
+  		previous_month = (last_scrapping.date - 1.month).beginning_of_month
   	end
 
-  	scrapping = Scrapping.find_or_initialize_by(:date => previous_month, :website => url, :success => false)
+  	scrapping = Scrapping.find_or_create_by(:date => previous_month, :website => website)
   	start_time = DateTime.now
 	    
     user = YAML.load_file('config/websites.yml')["website1"]["username"]
@@ -43,13 +45,13 @@ namespace :scrapping do
     page = sign_in_page.form_with(:name => nil) do |form|
     	form.fields.second.value = user
     	form.fields.third.value = password
-	end.submit
+    end.submit
   	
   	top_page = page.link_with(:text => top_link).click
 
   	images_saved=0
   	(1..14).each do |category_number|
-  		images_saved += scrap_category(top_page, YAML.load_file('config/websites.yml')["website1"]["category#{category_number}"], previous_month) 
+  		images_saved += scrap_category(top_page, YAML.load_file('config/websites.yml')["website1"]["category#{category_number}"], previous_month, website, scrapping) 
   	end
 
   	scrapping.update_attributes(
@@ -61,7 +63,7 @@ namespace :scrapping do
   end
 
 
-  def scrap_category(page, category, previous_month)
+  def scrap_category(page, category, previous_month, website, scrapping)
   	pp "Scrap category : #{category} - #{previous_month.strftime("%Y/%B")}"
    	page = page.link_with(:text => category).click
    	page = page.link_with(:text => previous_month.strftime("%Y")).click
@@ -74,34 +76,42 @@ namespace :scrapping do
    	links.each do |link|
    		page = link.click
    		page_image = page.image_with(:src => %r{/norm/})
-   		url = page_image.url.to_s
+      if page_image
+        url = page_image.url.to_s
 
-   		filename =  DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(url).path)
-      FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
+        filename =  DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(url).path)
+        FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
 
-   		if Image.where(:source_url => url).first.nil?
-   			pp "Save #{filename}"
-	   		file_path = "app/assets/images/to_sort/#{filename}"
-	   		open(file_path, 'wb') do |file|
-			   file << open(url).read
+        image = Image.where(:source_url => url).first
+        if image.nil?
+          pp "Save #{filename}"
+          file_path = "app/assets/images/to_sort/#{filename}"
+          open(file_path, 'wb') do |file|
+           file << open(url).read
+          end
+          
+          image = MiniMagick::Image.open(file_path) 
+          image.resize "300x300"
+          image.write  "app/assets/images/to_sort/thumbnails/300/#{filename}"
+
+          image_file = File.read(file_path)
+
+          Image.create(:key => filename, 
+            :image_hash => Digest::MD5.hexdigest(image_file),
+            :width => FastImage.size(file_path)[0], 
+            :height => FastImage.size(file_path)[1],
+            :file_size => image_file.size,
+            :source_url => url, 
+            :status => Image::TO_SORT_STATUS,
+            :website => website)
+          images_saved+=1
+          sleep(1)
+        else
+          pp "Assign scrapping #{filename}"
+          image.update_attributes(:scrapping => scrapping)
         end
-        
-        image = MiniMagick::Image.open(file_path) 
-        image.resize "300x300"
-        image.write  "app/assets/images/to_sort/thumbnails/300/#{filename}"
-
-        image_file = File.read(file_path)
-
-        Image.create(:key => filename, 
-          :image_hash => Digest::MD5.hexdigest(image_file),
-          :width => FastImage.size(file_path)[0], 
-          :height => FastImage.size(file_path)[1],
-          :file_size => image_file.size,
-          :source_url => url, 
-          :status => Image::TO_SORT_STATUS)
-        images_saved+=1
-        sleep(1)
-			end
+      end
+   		
    	end
    	images_saved
   end

@@ -1,9 +1,9 @@
 FactoryGirl.define do
-  factory :scrapping do |f|
-    f.date DateTime.now
-    f.duration 1234
-    f.website "string"
-    f.image_count 1234
-    f.success true
+  factory :scrapping do
+    date DateTime.now
+    duration 1234
+    image_count 1234
+    success true
+    website { FactoryGirl.create(:website) }
   end
 end

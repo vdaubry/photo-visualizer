@@ -1,11 +1,12 @@
 FactoryGirl.define do
-  factory :image do |f|
-    f.sequence(:key ) { |n| "key_#{n}" }
-    f.sequence(:image_hash ) { |n| "hash_#{n}" }
-    f.status Image::TO_KEEP_STATUS
-    f.file_size 1234
-    f.width 1234
-    f.height 1234
-    f.source_url "string"
+  factory :image do
+    sequence(:key ) { |n| "key_#{n}" }
+    sequence(:image_hash ) { |n| "hash_#{n}" }
+    status Image::TO_KEEP_STATUS
+    file_size 1234
+    width 1234
+    height 1234
+    source_url "string"
+    website { FactoryGirl.create(:website) }
   end
 end

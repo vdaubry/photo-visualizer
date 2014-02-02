@@ -2,7 +2,7 @@ namespace :image do
 
   desc "Move images to their respective folders"
   task :sort  => :environment do
-    raise "Cannot sort images when calinours safety is on !!" if Image.new.key == "calinours.jpg"
+    raise "Cannot sort images when calinours safety is on !!" if Image.first.key == "calinours.jpg"
 
     pp "Deleting #{Image.where(:status => Image::TO_DELETE_STATUS).count} images"
     Image.where(:status => Image::TO_DELETE_STATUS).each do |image|

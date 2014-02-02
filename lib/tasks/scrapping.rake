@@ -86,9 +86,6 @@ namespace :scrapping do
           image.download
           images_saved+=1
           sleep(1)
-        else
-          pp "Assign scrapping #{filename}"
-          image.update_attributes(:scrapping => scrapping)
         end
       end
    		

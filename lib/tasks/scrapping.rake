@@ -79,31 +79,11 @@ namespace :scrapping do
       if page_image
         url = page_image.url.to_s
 
-        filename =  DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(url).path)
-        FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
-
         image = Image.where(:source_url => url).first
         if image.nil?
-          pp "Save #{filename}"
-          file_path = "app/assets/images/to_sort/#{filename}"
-          open(file_path, 'wb') do |file|
-           file << open(url).read
-          end
-          
-          image = MiniMagick::Image.open(file_path) 
-          image.resize "300x300"
-          image.write  "app/assets/images/to_sort/thumbnails/300/#{filename}"
-
-          image_file = File.read(file_path)
-
-          Image.create(:key => filename, 
-            :image_hash => Digest::MD5.hexdigest(image_file),
-            :width => FastImage.size(file_path)[0], 
-            :height => FastImage.size(file_path)[1],
-            :file_size => image_file.size,
-            :source_url => url, 
-            :status => Image::TO_SORT_STATUS,
-            :website => website)
+          pp "Save #{image.key}"
+          image = Image.new(url, website, scrapping)
+          image.download
           images_saved+=1
           sleep(1)
         else

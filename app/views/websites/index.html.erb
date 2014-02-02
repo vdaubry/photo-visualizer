@@ -1,29 +1,23 @@
-<h1>Listing websites</h1>
-
-<table>
+<div class="page-header">
+  <h1>Websites</h1>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Url</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th> Name </th>
+      <th> URL </th>
+      <th> Number of images to sort </th>
+      <th> Last scrapping </th>
     </tr>
   </thead>
-
   <tbody>
     <% @websites.each do |website| %>
       <tr>
-        <td><%= website.name %></td>
+        <td><%= link_to website.name, website_images_path(website) %></td>
         <td><%= website.url %></td>
-        <td><%= link_to 'Show', website %></td>
-        <td><%= link_to 'Edit', edit_website_path(website) %></td>
-        <td><%= link_to 'Destroy', website, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= images_to_sort_count(website) %></td>
+        <td><%= last_scrapping_date(website) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Website', new_website_path %>

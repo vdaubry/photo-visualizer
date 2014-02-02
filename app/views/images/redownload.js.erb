@@ -1,0 +1,3 @@
+src = $('#<%= @image.id %>').children('img').attr("src")
+d = new Date();
+$('#<%= @image.id %>').children('img').attr("src", src+"?"+d.getTime());

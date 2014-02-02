@@ -1,15 +1,16 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy]
+  before_action :set_website, only: [:index, :update, :destroy, :destroy_all, :redownload]
+  before_action :set_image, only: [:update, :destroy, :redownload]
 
   # GET /images
   # GET /images.json
   def index
-    @to_sort_count = Image.where(:status => Image::TO_SORT_STATUS).count
-    @to_keep_count = Image.where(:status => Image::TO_KEEP_STATUS).count
-    @to_delete_count = Image.where(:status => Image::TO_DELETE_STATUS).count
+    @to_sort_count = @website.images.where(:status => Image::TO_SORT_STATUS).count
+    @to_keep_count = @website.images.where(:status => Image::TO_KEEP_STATUS).count
+    @to_delete_count = @website.images.where(:status => Image::TO_DELETE_STATUS).count
 
     status = params["status"].nil? ? Image::TO_SORT_STATUS : params["status"]
-    @images = Image.where(:status => status).page(params[:page])
+    @images = @website.images.where(:status => status).page(params[:page])
 
     if status==Image::TO_SORT_STATUS
       @images = @images.asc(:created_at)
@@ -22,31 +23,6 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
-  end
-
-  # GET /images/new
-  def new
-    @image = Image.new
-  end
-
-  # GET /images/1/edit
-  def edit
-  end
-
-  # POST /images
-  # POST /images.json
-  def create
-    @image = Image.new(image_params)
-
-    respond_to do |format|
-      if @image.save
-        format.html { redirect_to @image, notice: 'Image was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @image }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /images/1
@@ -66,21 +42,30 @@ class ImagesController < ApplicationController
 
   # DELETE /images/
   def destroy_all
-    Image.where(:_id.in => params["image"]["ids"]).update_all(
+    @website.images.where(:_id.in => params["image"]["ids"]).update_all(
         status: Image::TO_DELETE_STATUS
-      )
+      ) 
 
-    redirect_to images_url
-  end  
+    redirect_to website_images_url(@website)
+  end 
+
+  def redownload
+    @image.download
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_image
-      @image = Image.find(params[:id])
+      @image = @website.images.find(params[:id])
     end
+
+    def set_website
+      @website = Website.find(params[:website_id])
+    end
+    
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def image_params
-      params.permit(:id)
+      params.permit(:id, :image_id)
     end
 end

@@ -1,13 +1,18 @@
 PhotoVisualizer::Application.routes.draw do
-  resources :websites
+  root 'websites#index'
 
-  root 'images#index'
-  
-  resources :images do
-    collection do
-      delete 'destroy_all'
+
+  resources :websites do
+    resources :images do
+      member do
+        put 'redownload'
+      end
+      collection do
+        delete 'destroy_all'
+      end
     end
   end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

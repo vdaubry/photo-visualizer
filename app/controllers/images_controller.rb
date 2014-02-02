@@ -8,7 +8,7 @@ class ImagesController < ApplicationController
     @to_keep_count = Image.where(:status => Image::TO_KEEP_STATUS).count
     @to_delete_count = Image.where(:status => Image::TO_DELETE_STATUS).count
 
-
+    status = params["status"].nil? ? Image::TO_SORT_STATUS : params["status"]
     @images = Image.where(:status => status).page(params[:page])
 
     if status==Image::TO_SORT_STATUS

@@ -15,6 +15,14 @@ namespace :scrapping do
       FileUtils.mkdir_p 'ressources/to_keep'
     end
 
+
+#########################################################################################################
+#
+# Website1
+#
+#########################################################################################################
+
+
   desc "Scrap websites in websites.yml"
   task :website1  => :environment do
   	require 'open-uri'
@@ -59,9 +67,7 @@ namespace :scrapping do
   	  duration: DateTime.now-start_time,
   	  image_count: images_saved
   	)
-
   end
-
 
   def scrap_category(page, category, previous_month, website, scrapping)
   	pp "Scrap category : #{category} - #{previous_month.strftime("%Y/%B")}"
@@ -81,8 +87,8 @@ namespace :scrapping do
 
         image = Image.where(:source_url => url).first
         if image.nil?
+          image = Image.new.build_info(url, website, scrapping)
           pp "Save #{image.key}"
-          image = Image.new(url, website, scrapping)
           image.download
           images_saved+=1
           sleep(1)
@@ -92,5 +98,29 @@ namespace :scrapping do
    	end
    	images_saved
   end
+
+
+#########################################################################################################
+#
+# Website2
+#
+#########################################################################################################
+
+
+  desc "Scrap websites in websites.yml"
+  task :website2  => :environment do
+    require 'open-uri'
+    require 'digest/md5'
+
+    url = YAML.load_file('config/websites.yml')["website2"]["url"]
+    website = Website.where(:url => url).first
+    
+
+    start_time = DateTime.now
+    pp "Start scrapping #{url} for month : #{previous_month.strftime("%Y/%B")}"
+    home_page = Mechanize.new.get(url)
+  end
+
+
 
 end

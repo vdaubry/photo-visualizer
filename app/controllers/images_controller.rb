@@ -42,9 +42,11 @@ class ImagesController < ApplicationController
 
   # DELETE /images/
   def destroy_all
-    @website.images.where(:_id.in => params["image"]["ids"]).update_all(
-        status: Image::TO_DELETE_STATUS
-      ) 
+    if params["image"] && params["image"]["ids"]
+      @website.images.where(:_id.in => params["image"]["ids"]).update_all(
+          status: Image::TO_DELETE_STATUS
+        ) 
+    end
 
     redirect_to website_images_url(@website)
   end 

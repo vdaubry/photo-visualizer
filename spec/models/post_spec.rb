@@ -13,5 +13,9 @@ describe Post do
 				post.images.count.should == 2
 			}
 		end
+
+		context "invalid status" do
+			it { FactoryGirl.build(:post, :status => "foo").save.should == false }
+		end
 	end
 end

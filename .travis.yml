@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - 2.0.0
+services:
+  - mongodb
+
+script:
+  - RAILS_ENV=test
+  - bundle exec rspec

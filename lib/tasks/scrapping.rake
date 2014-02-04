@@ -58,7 +58,7 @@ namespace :scrapping do
   	top_page = page.link_with(:text => top_link).click
 
   	images_saved=0
-  	(1..14).each do |category_number|
+  	(1..12).each do |category_number|
   		images_saved += scrap_category(top_page, YAML.load_file('config/websites.yml')["website1"]["category#{category_number}"], previous_month, website, scrapping) 
   	end
 

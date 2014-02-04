@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe Image do
 
-	before :each do
-	end
-
 	describe "save" do
 		context "valid" do
 			it { FactoryGirl.build(:image).save.should == true }

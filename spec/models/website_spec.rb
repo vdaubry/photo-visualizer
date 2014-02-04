@@ -17,6 +17,11 @@ describe Website do
 				website.images.count.should==2
 				website.scrappings.count.should==2
 			}
+			it {
+				posts = FactoryGirl.create_list(:post, 2)
+				website = FactoryGirl.create(:website, :posts => posts)
+				website.posts.count == 2
+			}
 		end
 	end
 end

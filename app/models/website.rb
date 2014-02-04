@@ -3,6 +3,7 @@ class Website
   include Mongoid::Timestamps
   has_many :images
   has_many :scrappings
+  embeds_many :posts
 
   field :name, type: String
   field :url, type: String

@@ -25,7 +25,7 @@ class Image
   validates_inclusion_of :status, in: [ TO_KEEP_STATUS, TO_SORT_STATUS, TO_DELETE_STATUS, DELETED_STATUS, KEPT_STATUS ]
 
 
-  def build_info(source_url, website, scrapping)
+  def build_info(source_url, website, scrapping, post)
     self.source_url = source_url
     self.website = website
     self.scrapping = scrapping
@@ -38,16 +38,27 @@ class Image
   #   Rails.env.development? ? "calinours.jpg" : self[:key]
   # end
 
+  def self.image_path
+    "app/assets/images/to_sort"
+  end
+
+  def self.thumbnail_path
+    "app/assets/images/to_sort/thumbnails/300"
+  end
+
+  def self.asset_thumbnail_path
+    "to_sort/thumbnails/300"
+  end  
 
   def download
-    file_path = "app/assets/images/to_sort/#{self[:key]}"
+    file_path = "#{image_path}/#{self[:key]}"
     open(file_path, 'wb') do |file|
      file << open(source_url).read
     end
 
     image = MiniMagick::Image.open(file_path) 
     image.resize "300x300"
-    image.write  "app/assets/images/to_sort/thumbnails/300/#{self[:key]}"
+    image.write  "#{thumbnail_path}/#{self[:key]}"
 
     image_file = File.read(file_path)
     self.image_hash = Digest::MD5.hexdigest(image_file)

@@ -6,10 +6,10 @@ namespace :scrapping do
     task :reset  => :environment do
       Image.delete_all
       Scrapping.delete_all
-      FileUtils.rm_rf('app/assets/images/to_sort')
-      FileUtils.mkdir_p 'app/assets/images/to_sort/thumbnails/300'
-      FileUtils.cp 'lib/calinours_mini.jpg', 'app/assets/images/to_sort/thumbnails/300/calinours.jpg'
-      FileUtils.cp 'lib/calinours.jpg', 'app/assets/images/to_sort/calinours.jpg'
+      FileUtils.rm_rf image_path
+      FileUtils.mkdir_p Image.thumbnail_path
+      FileUtils.cp 'lib/calinours_mini.jpg', "#{Image.thumbnail_path}/calinours.jpg"
+      FileUtils.cp 'lib/calinours.jpg', "#{image_path}/calinours.jpg"
 
       FileUtils.rm_rf('ressources')
       FileUtils.mkdir_p 'ressources/to_keep'
@@ -59,7 +59,8 @@ namespace :scrapping do
 
   	images_saved=0
   	(1..12).each do |category_number|
-  		images_saved += scrap_category(top_page, YAML.load_file('config/websites.yml')["website1"]["category#{category_number}"], previous_month, website, scrapping) 
+      category_name = YAML.load_file('config/websites.yml')["website1"]["category#{category_number}"]
+  		images_saved += scrap_category(top_page, category_name, previous_month, website, scrapping) 
   	end
 
   	scrapping.update_attributes(
@@ -75,6 +76,9 @@ namespace :scrapping do
    	page = page.link_with(:text => previous_month.strftime("%Y")).click
    	page = page.link_with(:text => previous_month.strftime("%B")).click
 
+    post = scrapping.posts.find_or_create_by(:name => "#{category}_#{previous_month.strftime("%Y")}")
+    website.posts.push(post)
+
    	link_reg_exp = YAML.load_file('config/websites.yml')["website1"]["link_reg_exp"]
    	links = page.links_with(:href => %r{#{link_reg_exp}})#[0..1]
    	pp "Found #{links.count} links" 
@@ -87,7 +91,7 @@ namespace :scrapping do
 
         image = Image.where(:source_url => url).first
         if image.nil?
-          image = Image.new.build_info(url, website, scrapping)
+          image = Image.new.build_info(url, website, scrapping, post)
           pp "Save #{image.key}"
           image.download
           images_saved+=1

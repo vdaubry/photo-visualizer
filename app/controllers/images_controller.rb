@@ -5,17 +5,19 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    @to_sort_count = @website.images.where(:status => Image::TO_SORT_STATUS).count
-    @to_keep_count = @website.images.where(:status => Image::TO_KEEP_STATUS).count
-    @to_delete_count = @website.images.where(:status => Image::TO_DELETE_STATUS).count
+    #TODO : passer le post dans l'URL (cf websites index)
+    @post =  @website.posts.where(:status => Post::TO_SORT_STATUS).last
+
+    @to_sort_count = @post.images.where(:status => Image::TO_SORT_STATUS).count
+    @to_keep_count = @post.images.where(:status => Image::TO_KEEP_STATUS).count
+    @to_delete_count = @post.images.where(:status => Image::TO_DELETE_STATUS).count
 
     status = params["status"].nil? ? Image::TO_SORT_STATUS : params["status"]
-    @images = @website.images.where(:status => status).page(params[:page])
-
+    
     if status==Image::TO_SORT_STATUS
-      @images = @images.asc(:created_at)
+      @images = @post.images.where(:status => status).asc(:created_at).page(params[:page])
     else 
-      @images = @images.desc(:updated_at)
+      @images = @website.images.where(:status => status).desc(:updated_at).page(params[:page])
     end
     
   end
@@ -31,6 +33,9 @@ class ImagesController < ApplicationController
       status: Image::TO_KEEP_STATUS
     )
 
+    #TODO : passer le post dans l'URL (cf websites index)
+    @post =  @website.posts.where(:status => Post::TO_SORT_STATUS).last
+    @post.check_status!
   end
 
   # DELETE /images/1
@@ -38,6 +43,10 @@ class ImagesController < ApplicationController
     @image.update_attributes(
       status: Image::TO_DELETE_STATUS
     )
+
+    #TODO : passer le post dans l'URL (cf websites index)
+    @post =  @website.posts.where(:status => Post::TO_SORT_STATUS).last
+    @post.check_status!
   end
 
   # DELETE /images/
@@ -45,8 +54,12 @@ class ImagesController < ApplicationController
     if params["image"] && params["image"]["ids"]
       @website.images.where(:_id.in => params["image"]["ids"]).update_all(
           status: Image::TO_DELETE_STATUS
-        ) 
+      ) 
     end
+
+    #TODO : passer le post dans l'URL (cf websites index)
+    @post =  @website.posts.where(:status => Post::TO_SORT_STATUS).last
+    @post.check_status!
 
     redirect_to website_images_url(@website)
   end 

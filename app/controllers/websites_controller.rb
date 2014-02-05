@@ -1,8 +1,7 @@
 class WebsitesController < ApplicationController
   before_action :set_website, only: [:show, :edit, :update, :destroy]
 
-  # GET /websites
-  # GET /websites.json
+  #TODO : Passer à la vue le dernier post pour construire les urls URL
   def index
     @websites = Website.all
   end

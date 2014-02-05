@@ -6,14 +6,14 @@ namespace :image do
 
     pp "Deleting #{Image.where(:status => Image::TO_DELETE_STATUS).count} images"
     Image.where(:status => Image::TO_DELETE_STATUS).each do |image|
-      FileUtils.rm "app/assets/images/to_sort/#{image.key}"
-      FileUtils.rm "app/assets/images/to_sort/thumbnails/300/#{image.key}"
+      FileUtils.rm "#{Image.image_path}/#{image.key}"
+      FileUtils.rm "#{Image.thumbnail_path}/#{image.key}"
     end
 
     pp "Saving #{Image.where(:status => Image::TO_KEEP_STATUS).count} images"
     Image.where(:status => Image::TO_KEEP_STATUS).each do |image|
-      FileUtils.mv "app/assets/images/to_sort/#{image.key}", "ressources/to_keep/#{image.key}"
-      FileUtils.rm "app/assets/images/to_sort/thumbnails/300/#{image.key}"
+      FileUtils.mv "#{Image.image_path}/#{image.key}", "ressources/to_keep/#{image.key}"
+      FileUtils.rm "#{Image.thumbnail_path}/#{image.key}"
     end
 
     Image.where(:status => Image::TO_KEEP_STATUS).update_all(:status => Image::KEPT_STATUS)

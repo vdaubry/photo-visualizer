@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1>Images</h1>
+  <h1><%= @post.name %></h1>
 </div>
 
 <div class="span12">
@@ -8,6 +8,7 @@
       <ul class="nav nav-list">
         <li class="nav-header">Sidebar</li>
         <li class="link"><%= link_to "Delete All remaining images", "#", :class => "btn-danger destroy_all_link", :remote => true %></li>
+        <li class="link"><%= link_to "Delete post", @post, :method => :delete, :class => "btn-danger" %></li>
         <li class="link"><%= link_to "Images to sort", website_images_path(@website, :status => Image::TO_SORT_STATUS) %></li>
         <li class="title"><span class="badge"><%=@to_sort_count%></span></li>
         <li class="link"><%= link_to "Images to keep", website_images_path(@website, :status => Image::TO_KEEP_STATUS) %></li>
@@ -28,7 +29,7 @@
           <span><%= image.width %>x<%= image.height %></span>
         </p>
       </div>
-        <span class="helper"></span><%= image_tag "to_sort/thumbnails/300/"+image.key %>
+        <span class="helper"></span><%= image_tag Image.asset_thumbnail_path+"/"+image.key %>
       </div>
     <% end %>
   </div>

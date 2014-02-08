@@ -3,10 +3,10 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:destroy]
 
   def destroy
-    @post.images.update_all(status: Image::TO_DELETE_STATUS)
+    @post.images.where(:status => Image::TO_SORT_STATUS).update_all(:status => Image::TO_DELETE_STATUS)
     @post.update_attributes(:status => Post::SORTED_STATUS)
 
-    redirect_to website_images_path(@post.website)
+    redirect_to website_post_images_path(@website, @website.latest_post)
   end
 
 	private

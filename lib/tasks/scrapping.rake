@@ -33,10 +33,7 @@ namespace :scrapping do
     website = Website.where(:url => url).first
 
   	last_scrapping = Scrapping.where(:success => true, :website => website).asc(:date).limit(1).first
-  	previous_month = 1.month.ago.beginning_of_month
-  	if last_scrapping
-  		previous_month = (last_scrapping.date - 1.month).beginning_of_month
-  	end
+    previous_month = last_scrapping.nil? ? 1.month.ago.beginning_of_month : (last_scrapping.date - 1.month).beginning_of_month
 
   	scrapping = Scrapping.find_or_create_by(:date => previous_month, :website => website)
   	start_time = DateTime.now
@@ -76,8 +73,8 @@ namespace :scrapping do
    	page = page.link_with(:text => previous_month.strftime("%Y")).click
    	page = page.link_with(:text => previous_month.strftime("%B")).click
 
-    post = scrapping.posts.find_or_create_by(:name => "#{category}_#{previous_month.strftime("%Y")}")
-    website.posts.push(post)
+    post = scrapping.posts.find_or_create_by(:name => "#{category}_#{previous_month.strftime("%Y_%B")}")
+    post.update_attributes(:website => website, :status => Post::TO_SORT_STATUS)
 
    	link_reg_exp = YAML.load_file('config/websites.yml')["website1"]["link_reg_exp"]
    	links = page.links_with(:href => %r{#{link_reg_exp}})#[0..1]
@@ -91,7 +88,7 @@ namespace :scrapping do
 
         image = Image.where(:source_url => url).first
         if image.nil?
-          image = Image.new.build_info(url, website, scrapping, post)
+          image = Image.new.build_info(url, website, post)
           pp "Save #{image.key}"
           image.download
           images_saved+=1

@@ -11,9 +11,9 @@ PhotoVisualizer::Application.routes.draw do
         delete 'destroy_all'
       end
     end
-  end
 
-  resources :posts, :only => :destroy
+    resources :posts, :only => :destroy
+  end
 
 
   # The priority is based upon order of creation: first created -> highest priority.

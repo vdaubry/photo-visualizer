@@ -2,7 +2,6 @@ class Scrapping
   include Mongoid::Document
   include Mongoid::Timestamps
   belongs_to :website
-  has_many :images
   embeds_many :posts
 
   field :date, type: Time

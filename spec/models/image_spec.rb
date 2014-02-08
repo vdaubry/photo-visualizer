@@ -15,7 +15,7 @@ describe Image do
 			it { FactoryGirl.build(:image, :width => nil).save.should == false }
 			it { FactoryGirl.build(:image, :height => nil).save.should == false }
 			it { FactoryGirl.build(:image, :source_url => nil).save.should == false }
-			it { FactoryGirl.build(:image, :scrapping => nil).save.should == true }
+			it { FactoryGirl.build(:image, :post => nil).save.should == true }
 			it { FactoryGirl.build(:image, :website => nil).save.should == false }
 		end
 

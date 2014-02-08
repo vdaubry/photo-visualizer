@@ -10,7 +10,6 @@ class Image
   include Mongoid::Document
   include Mongoid::Timestamps
   belongs_to :website
-  belongs_to :scrapping
   belongs_to :post
 
   field :key, type: String

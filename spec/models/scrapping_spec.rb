@@ -8,18 +8,13 @@ describe Scrapping do
 	describe "save" do
 		context "valid" do 
 			it { FactoryGirl.build(:scrapping).save.should == true }
+
 			it { 
 				date = 1.day.ago
 				FactoryGirl.create(:scrapping, :date => date, :website => FactoryGirl.create(:website), :success => true)
 				FactoryGirl.build(:scrapping, :date => date, :website => FactoryGirl.create(:website), :success => false).save.should == true
 			}
 
-			it {
-				scrapping = FactoryGirl.create(:scrapping)
-				FactoryGirl.create_list(:image, 2, :scrapping => scrapping)
-				scrapping.images.count.should == 2
-				Scrapping.first.images.count.should == 2
-			}
 			it {
 				scrapping = FactoryGirl.create(:scrapping)
 				posts = FactoryGirl.create_list(:post, 2)

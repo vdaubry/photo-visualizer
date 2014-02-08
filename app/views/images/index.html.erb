@@ -8,7 +8,7 @@
       <ul class="nav nav-list">
         <li class="nav-header">Sidebar</li>
         <li class="link"><%= link_to "Delete All remaining images", "#", :class => "btn-danger destroy_all_link", :remote => true %></li>
-        <li class="link"><%= link_to "Delete post", @post, :method => :delete, :class => "btn-danger" %></li>
+        <li class="link"><%= link_to "Delete post", [@website, @post], :method => :delete, :class => "btn-danger" %></li>
         <li class="link"><%= link_to "Images to sort", website_images_path(@website, :status => Image::TO_SORT_STATUS) %></li>
         <li class="title"><span class="badge"><%=@to_sort_count%></span></li>
         <li class="link"><%= link_to "Images to keep", website_images_path(@website, :status => Image::TO_KEEP_STATUS) %></li>

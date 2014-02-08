@@ -45,8 +45,8 @@ describe Image do
 	describe "download" do
 		it "saves file" do
 			image = FactoryGirl.create(:image, :key => "calinours.jpg")
-			image.stubs(:image_path).returns("lib")
-			image.stubs(:thumbnail_path).returns("ressources")
+			Image.stubs(:image_path).returns("lib")
+			Image.stubs(:thumbnail_path).returns("ressources")
 			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
 
 			image.download

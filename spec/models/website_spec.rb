@@ -19,9 +19,11 @@ describe Website do
 			}
 			it {
 				posts = FactoryGirl.create_list(:post, 2)
-				website = FactoryGirl.create(:website, :posts => posts)
+				website = FactoryGirl.create(:website)
+				website.posts.push(posts)
 				website.posts.count == 2
 			}
+
 		end
 	end
 end

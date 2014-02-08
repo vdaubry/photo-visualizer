@@ -5,6 +5,7 @@ class PostsController < ApplicationController
   def destroy
     @post.images.update_all(status: Image::TO_DELETE_STATUS)
     @post.update_attributes(:status => Post::SORTED_STATUS)
+
     redirect_to website_images_path(@post.website)
   end
 

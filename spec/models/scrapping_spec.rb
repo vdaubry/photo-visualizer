@@ -17,8 +17,7 @@ describe Scrapping do
 
 			it {
 				scrapping = FactoryGirl.create(:scrapping)
-				posts = FactoryGirl.create_list(:post, 2)
-				scrapping.posts.push(posts)
+				posts = FactoryGirl.create_list(:post, 2, :scrapping => scrapping)
 				scrapping.posts.count.should == 2
 				Scrapping.first.posts.count.should == 2
 			}
@@ -37,14 +36,8 @@ describe Scrapping do
 			context "duplicates for a date" do
 				it {
 					scrapping = FactoryGirl.create(:scrapping)
-					post = FactoryGirl.build(:post, :scrapping => scrapping, :name => "foo")
-					scrapping.posts.push(post)
- 
-					post2 = FactoryGirl.build(:post, :scrapping => scrapping, :name => "foo")
-					scrapping.posts.push(post)
-
-					Scrapping.count.should == 1
-					Scrapping.first.posts.count.should == 1
+					post = FactoryGirl.create(:post, :scrapping => scrapping, :name => "foo")
+					post2 = FactoryGirl.build(:post, :scrapping => scrapping, :name => "foo").save.should == false
 				}
 			end
 		end

@@ -4,15 +4,15 @@ describe ImagesController do
   render_views
 
   let(:website) { FactoryGirl.create(:website) }
-  let(:to_sort_post) { FactoryGirl.create(:post, :status => Post::TO_SORT_STATUS) }
-  let(:to_sort_image) { FactoryGirl.create(:image, :status => Image::TO_SORT_STATUS) }
+  let(:to_sort_post) { FactoryGirl.create(:post, :status => Post::TO_SORT_STATUS, :website => website) }
+  let(:to_sort_image) { FactoryGirl.create(:image, :status => Image::TO_SORT_STATUS, :website => website, :post => to_sort_post) }
 
   describe "GET index" do
     
     it "returns post with status to_sort" do
-      sorted_post = FactoryGirl.create(:post, :status => Post::SORTED_STATUS)
-      website.posts.push([to_sort_post, sorted_post])
-
+      to_sort_post #touch to create
+      sorted_post = FactoryGirl.create(:post, :status => Post::SORTED_STATUS, :website => website)
+      
       get 'index', :website_id => website.id
       
       assigns(:post).should eq(to_sort_post)
@@ -20,8 +20,8 @@ describe ImagesController do
 
     context "to sort images" do
       it "returns latest post images" do
-        to_sort_post2 = FactoryGirl.create(:post, :status => Post::TO_SORT_STATUS, :name => "post2")
-        website.posts.push([to_sort_post, to_sort_post2])
+        to_sort_post2 = FactoryGirl.create(:post, :status => Post::TO_SORT_STATUS, :name => "post2", :website => website)
+        
         image = FactoryGirl.create(:image, :post => to_sort_post2, :status => Image::TO_SORT_STATUS)
 
         get 'index', :website_id => website.id, "status" => Image::TO_SORT_STATUS
@@ -32,7 +32,6 @@ describe ImagesController do
 
     context "to keep images" do
       it "returns website images" do
-        website.posts.push([to_sort_post])
         image = FactoryGirl.create(:image, :website => website, :status => Image::TO_KEEP_STATUS)
         image2 = FactoryGirl.create(:image, :post => to_sort_post, :status => Image::TO_KEEP_STATUS)
 
@@ -44,7 +43,6 @@ describe ImagesController do
 
     context "to delete images" do
       it "returns website images" do
-        website.posts.push([to_sort_post])
         image = FactoryGirl.create(:image, :website => website, :status => Image::TO_DELETE_STATUS)
         image2 = FactoryGirl.create(:image, :post => to_sort_post, :status => Image::TO_DELETE_STATUS)
 
@@ -56,11 +54,6 @@ describe ImagesController do
   end
 
   describe "PUT update" do
-    before :each do
-      website.images.push(to_sort_image)
-      website.posts.push(to_sort_post)
-    end
-
     it "updates image status to keep status" do
       put 'update', :website_id => website.id, :id => to_sort_image.id, :format => :js
 
@@ -75,11 +68,6 @@ describe ImagesController do
   end
 
   describe "DELETE destroy" do
-    before :each do
-      website.images.push(to_sort_image)
-      website.posts.push(to_sort_post)
-    end
-
     it "updates image status to delete status" do
       delete 'destroy', :website_id => website.id, :id => to_sort_image.id, :format => :js
 
@@ -95,9 +83,7 @@ describe ImagesController do
 
   describe "DELETE destroy_all" do
     before :each do
-      @image2 = FactoryGirl.create(:image, :status => Image::TO_SORT_STATUS)
-      website.images.push([to_sort_image, @image2])
-      website.posts.push(to_sort_post)
+      @image2 = FactoryGirl.create(:image, :status => Image::TO_SORT_STATUS, :website => website)
     end
 
     it "updates image status to delete status" do
@@ -121,10 +107,6 @@ describe ImagesController do
   end
 
   describe "PUT redownload" do
-    before :each do
-      website.images.push(to_sort_image)
-    end
-
     it "redownloads image" do
       Image.any_instance.expects(:download).once
 

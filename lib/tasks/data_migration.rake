@@ -2,16 +2,11 @@ namespace :migration do
 
   desc "Migrate data"
   task :start  => :environment do
-    Website.delete_all
-  	website = Website.create(:name => "WBW", :url => "https://whatboyswant.com/")
-
-  	Image.where(:website => nil).update_all(:website => website)
-
-  	Scrapping.update_all( { $unset => { website: 1 } } )
-
-  	Scrapping.each do |scrapping|
-  		scrapping.website = website
-  		scrapping.save
-  	end
+    Website.each do |website|
+      website.scrappings.each do |scrapping|
+        post = scrapping.posts.find_or_create_by(:name => "undefined", :status => Post::SORTED_STATUS)
+        post.update_attributes(:website => website)
+      end
+    end     
   end
 end

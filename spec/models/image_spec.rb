@@ -23,4 +23,38 @@ describe Image do
 			it { FactoryGirl.build(:image, :status => "foo").save.should == false }
 		end
 	end
+
+	describe "build info" do
+		it "create a new image with parameters" do
+			fake_date = DateTime.parse("01/01/2014")
+			DateTime.stubs(:now).returns fake_date
+			url = "http://foo.bar"
+			website = FactoryGirl.create(:website)
+			post = FactoryGirl.create(:post)
+
+			img = Image.new.build_info(url, website, post)
+
+			img.source_url.should == url
+			img.website.should == website
+			img.key.should == fake_date.to_i.to_s + "_" + File.basename(URI.parse(url).path)
+			img.status.should == Image::TO_SORT_STATUS
+			img.post.should == post
+		end
+	end
+
+	describe "download" do
+		it "saves file" do
+			image = FactoryGirl.create(:image, :key => "calinours.jpg")
+			Image.stubs(:image_path).returns("lib")
+			Image.stubs(:thumbnail_path).returns("spec/ressources")
+			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
+
+			image.download
+
+			image.image_hash.should == "a1e4b773a5cd2941a4a442b7309c8ced"
+			image.file_size.should == 197890
+			image.width.should == 1200
+			image.height.should == 780
+		end
+	end
 end

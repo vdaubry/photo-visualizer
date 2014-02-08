@@ -24,12 +24,12 @@ class Image
   validates_inclusion_of :status, in: [ TO_KEEP_STATUS, TO_SORT_STATUS, TO_DELETE_STATUS, DELETED_STATUS, KEPT_STATUS ]
 
 
-  def build_info(source_url, website, scrapping, post)
+  def build_info(source_url, website, post)
     self.source_url = source_url
     self.website = website
-    self.scrapping = scrapping
     self.key = DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(source_url).path)
     self.status = Image::TO_SORT_STATUS
+    self.post = post
     self
   end
 
@@ -50,14 +50,14 @@ class Image
   end  
 
   def download
-    file_path = "#{image_path}/#{self[:key]}"
+    file_path = "#{Image.image_path}/#{self[:key]}"
     open(file_path, 'wb') do |file|
      file << open(source_url).read
     end
 
     image = MiniMagick::Image.open(file_path) 
     image.resize "300x300"
-    image.write  "#{thumbnail_path}/#{self[:key]}"
+    image.write  "#{Image.thumbnail_path}/#{self[:key]}"
 
     image_file = File.read(file_path)
     self.image_hash = Digest::MD5.hexdigest(image_file)

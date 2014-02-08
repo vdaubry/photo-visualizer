@@ -3,16 +3,18 @@ PhotoVisualizer::Application.routes.draw do
 
 
   resources :websites do
-    resources :images do
-      member do
-        put 'redownload'
-      end
-      collection do
-        delete 'destroy_all'
+    resources :posts, :only => :destroy do
+      resources :images do
+        member do
+          put 'redownload'
+        end
+        collection do
+          delete 'destroy_all'
+        end
       end
     end
 
-    resources :posts, :only => :destroy
+    resources :images, :only => :index
   end
 
 

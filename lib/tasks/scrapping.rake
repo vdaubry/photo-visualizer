@@ -23,7 +23,7 @@ namespace :scrapping do
 #########################################################################################################
 
 
-  desc "Scrap websites in websites.yml"
+  desc "Scrap website1 in websites.yml"
   task :website1  => :environment do
   	require 'open-uri'
     require 'digest/md5'
@@ -108,7 +108,7 @@ namespace :scrapping do
 #########################################################################################################
 
 
-  desc "Scrap websites in websites.yml"
+  desc "Scrap website2 in websites.yml"
   task :website2  => :environment do
     require 'open-uri'
     require 'digest/md5'
@@ -141,6 +141,38 @@ namespace :scrapping do
     )
   end
 
+
+  desc "Scrap specific page of website2 in websites.yml"
+  task :website2_page, [:id]  => :environment do |t, args|
+    require 'open-uri'
+    require 'digest/md5'
+
+    url = YAML.load_file('config/websites.yml')["website2"]["url"]
+    website = Website.where(:url => url).first
+
+    new_scrapping = website.scrappings.create(:date => DateTime.now)
+    start_time = DateTime.now
+
+    base_url = YAML.load_file('config/websites.yml')["website2"]["base_url"]
+    page_id = args.id
+    page = Mechanize.new.get("#{base_url}/#{page_id}")
+    pp "Start scrapping #{base_url}/#{page_id} all images"
+
+    post_name = page_id.gsub('_', ' ')
+    post = website.posts.find_or_create_by(:name => post_name)
+    post.update_attributes(:scrapping => new_scrapping, :status => Post::TO_SORT_STATUS)
+
+    images_saved=0
+    images_saved+=scrap_current_page(page, 50.years.ago, website, post, images_saved)
+
+    new_scrapping.update_attributes(
+      success: true,
+      duration: DateTime.now-start_time,
+      image_count: images_saved
+    )
+  end
+
+
   def scrap_page(link, post, website, previous_scrapping_date)
     pp "Scrap : #{post.name} since #{previous_scrapping_date}"
     page = link.click
@@ -157,8 +189,8 @@ namespace :scrapping do
     pid = doc.css("div.pic").first.children[1].text.split("id. ").last
     post_url = YAML.load_file('config/websites.yml')["website2"]["post_url"]
     browser = Mechanize.new
-    doc = browser.post(post_url, {"req" => "pexpand", "pid" => pid}).parser
-    added_on = doc.xpath("//body").children[0].text.split("added on: ").last
+    response_doc = browser.post(post_url, {"req" => "pexpand", "pid" => pid}).parser
+    added_on = response_doc.xpath("//body").children[0].text.split("added on: ").last
 
     puts "latest pic is #{added_on}"
 

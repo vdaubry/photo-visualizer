@@ -6,14 +6,22 @@ namespace :image do
 
     pp "Deleting #{Image.where(:status => Image::TO_DELETE_STATUS).count} images"
     Image.where(:status => Image::TO_DELETE_STATUS).each do |image|
-      FileUtils.rm "#{Image.image_path}/#{image.key}"
-      FileUtils.rm "#{Image.thumbnail_path}/#{image.key}"
+      begin
+        FileUtils.rm "#{Image.image_path}/#{image.key}"
+        FileUtils.rm "#{Image.thumbnail_path}/#{image.key}"
+      rescue Errno::ENOENT => e
+        pp "Failed with error : #{e.message}"
+      end
     end
 
     pp "Saving #{Image.where(:status => Image::TO_KEEP_STATUS).count} images"
     Image.where(:status => Image::TO_KEEP_STATUS).each do |image|
-      FileUtils.mv "#{Image.image_path}/#{image.key}", "ressources/to_keep/#{image.key}"
-      FileUtils.rm "#{Image.thumbnail_path}/#{image.key}"
+      begin
+        FileUtils.mv "#{Image.image_path}/#{image.key}", "ressources/to_keep/#{image.key}"
+        FileUtils.rm "#{Image.thumbnail_path}/#{image.key}"
+      rescue Errno::ENOENT => e
+        pp "Failed with error : #{e.message}"
+      end
     end
 
     Image.where(:status => Image::TO_KEEP_STATUS).update_all(:status => Image::KEPT_STATUS)

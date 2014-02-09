@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-namespace :scrapping do
+namespace :websites do
 
     desc "Scrap websites in websites.yml"
     task :reset  => :environment do

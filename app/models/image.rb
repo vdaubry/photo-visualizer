@@ -49,21 +49,37 @@ class Image
     "to_sort/thumbnails/300"
   end  
 
-  def download
-    file_path = "#{Image.image_path}/#{self[:key]}"
-    open(file_path, 'wb') do |file|
-     file << open(source_url, :allow_redirections => :all).read
-    end
 
-    image = MiniMagick::Image.open(file_path) 
+  def image_save_path
+    "#{Image.image_path}/#{self[:key]}"
+  end
+
+  def generate_thumb
+    image = MiniMagick::Image.open(image_save_path) 
     image.resize "300x300"
     image.write  "#{Image.thumbnail_path}/#{self[:key]}"
+  end
 
-    image_file = File.read(file_path)
+  def set_image_info
+    image_file = File.read(image_save_path)
     self.image_hash = Digest::MD5.hexdigest(image_file)
-    self.width = FastImage.size(file_path)[0]
-    self.height = FastImage.size(file_path)[1]
+    self.width = FastImage.size(image_save_path)[0]
+    self.height = FastImage.size(image_save_path)[1]
     self.file_size = image_file.size
     save!
   end
+
+  def download(page_image=nil)
+    if page_image
+      page_image.fetch.save image_save_path
+    else
+      open(image_save_path, 'wb') do |file|
+        file << open(source_url, :allow_redirections => :all).read
+      end
+    end
+    
+    generate_thumb
+    set_image_info
+  end
+
 end

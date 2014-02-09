@@ -29,7 +29,7 @@
           <span><%= image.width %>x<%= image.height %></span>
         </p>
       </div>
-        <span class="helper"></span><%= image_tag Image.asset_thumbnail_path+"/"+image.key %>
+        <span class="helper"><%= image_tag Image.asset_thumbnail_path+"/"+image.key %></span>
       </div>
     <% end %>
   </div>

@@ -122,6 +122,12 @@ describe ImagesController do
 
         response.should redirect_to website_post_images_url(assigns(:website), next_to_sort_post)
       end
+
+      it "redirects to home if not more posts" do
+        delete 'destroy_all', :website_id => website.id, :post_id => to_sort_post.id, "image" => {"ids" => [to_sort_image.id, @image2.id]}
+
+        response.should redirect_to root_url
+      end
     end
 
     context "not all images are sorted" do

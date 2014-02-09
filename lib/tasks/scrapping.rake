@@ -115,13 +115,83 @@ namespace :scrapping do
 
     url = YAML.load_file('config/websites.yml')["website2"]["url"]
     website = Website.where(:url => url).first
-    
+    last_scrapping = Scrapping.where(:success => true, :website => website).asc(:date).limit(1).first
+    previous_scrapping_date = last_scrapping.nil? ? 1.month.ago.beginning_of_month : last_scrapping.date
 
+    new_scrapping = website.scrappings.create(:date => DateTime.now)
     start_time = DateTime.now
-    pp "Start scrapping #{url} for month : #{previous_month.strftime("%Y/%B")}"
+
+    pp "Start scrapping #{url} new images since : #{previous_scrapping_date}"
     home_page = Mechanize.new.get(url)
+    excluded_urls = YAML.load_file('config/websites.yml')["website2"]["excluded_urls"]
+
+    links = home_page.links.map {|link| link if link.text.present? && !excluded_urls.any? {|s| link.href.include?(s)} && link.href.size>1}.compact
+    images_saved=0
+    links.each do |link|
+      post_name = link.text
+      post = website.posts.find_or_create_by(:name => post_name)
+      post.update_attributes(:scrapping => new_scrapping, :status => Post::TO_SORT_STATUS)
+      images_saved+=scrap_page(link, post, website, previous_scrapping_date)
+    end
+
+    new_scrapping.update_attributes(
+      success: true,
+      duration: DateTime.now-start_time,
+      image_count: images_saved
+    )
   end
 
+  def scrap_page(link, post, website, previous_scrapping_date)
+    pp "Scrap : #{post.name} since #{previous_scrapping_date}"
+    page = link.click
+    images_saved=0
+    images_saved = scrap_current_page(page, previous_scrapping_date, website, post, images_saved)
 
+    puts "images_saved = #{images_saved}"
+    images_saved
+  end
 
+  def scrap_current_page(page, previous_scrapping_date, website, post, images_saved)
+    #check current page date 
+    doc = page.parser
+    pid = doc.css("div.pic").first.children[1].text.split("id. ").last
+    post_url = YAML.load_file('config/websites.yml')["website2"]["post_url"]
+    browser = Mechanize.new
+    doc = browser.post(post_url, {"req" => "pexpand", "pid" => pid}).parser
+    added_on = doc.xpath("//body").children[0].text.split("added on: ").last
+
+    puts "latest pic is #{added_on}"
+
+    if Date.parse(added_on) > previous_scrapping_date
+      img_links = page.links_with(:href=>/.jpg/)
+
+      puts "Found #{img_links.count} images"
+
+      img_links.each do |img_link|
+        url = img_link.href
+
+        image = Image.where(:source_url => url).first
+        if image.nil?
+          image = Image.new.build_info(url, website, post)
+          pp "Save #{image.key}"
+          image.download
+          images_saved+=1
+          sleep(1)
+        end
+      end
+
+      #next page
+      cid = page.link_with(:text => "Upload Here").href.split('/').last
+      button = doc.xpath("//button[@onclick]").select {|node| node.text == "Load 100 more"}.first
+      if button
+        puts "Loading next page"
+        lastpid = button.attr("onclick").scan(/[0-9]/).join
+        post_url = YAML.load_file('config/websites.yml')["website2"]["post_url"]
+        page = browser.post(post_url, {"req" => "morepics", "cid" => cid, "lastpid" => lastpid})
+        images_saved = scrap_current_page(page, previous_scrapping_date, website, post, images_saved)
+      end
+    end
+
+    images_saved
+  end
 end

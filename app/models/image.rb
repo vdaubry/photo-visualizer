@@ -52,7 +52,7 @@ class Image
   def download
     file_path = "#{Image.image_path}/#{self[:key]}"
     open(file_path, 'wb') do |file|
-     file << open(source_url).read
+     file << open(source_url, :allow_redirections => :all).read
     end
 
     image = MiniMagick::Image.open(file_path) 

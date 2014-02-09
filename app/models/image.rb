@@ -27,7 +27,7 @@ class Image
   def build_info(source_url, website, post)
     self.source_url = source_url
     self.website = website
-    self.key = DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(source_url).path)
+    self.key = (DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(source_url).path)).gsub('-', '_').gsub(/[^0-9A-Za-z_\.]/, '')
     self.status = Image::TO_SORT_STATUS
     self.post = post
     self

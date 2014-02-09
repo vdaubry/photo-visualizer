@@ -54,7 +54,11 @@ class ImagesController < ApplicationController
     @post.check_status!
     next_post = @website.latest_post
 
-    redirect_to website_post_images_url(@website, next_post)
+    if next_post
+      redirect_to website_post_images_url(@website, next_post)
+    else
+      redirect_to root_url
+    end
   end 
 
   def redownload

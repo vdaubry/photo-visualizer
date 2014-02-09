@@ -25,13 +25,14 @@ describe Image do
 	end
 
 	describe "build info" do
+		let(:website) { FactoryGirl.create(:website) }
+		let(:post) { FactoryGirl.create(:post) }
+
 		it "create a new image with parameters" do
 			fake_date = DateTime.parse("01/01/2014")
 			DateTime.stubs(:now).returns fake_date
 			url = "http://foo.bar"
-			website = FactoryGirl.create(:website)
-			post = FactoryGirl.create(:post)
-
+			
 			img = Image.new.build_info(url, website, post)
 
 			img.source_url.should == url
@@ -39,6 +40,16 @@ describe Image do
 			img.key.should == fake_date.to_i.to_s + "_" + File.basename(URI.parse(url).path)
 			img.status.should == Image::TO_SORT_STATUS
 			img.post.should == post
+		end
+
+		it "format special characters" do
+			fake_date = DateTime.parse("01/01/2014")
+			DateTime.stubs(:now).returns fake_date
+			url = "http://foo.bar/abc-jhvg-emil123.jpg"
+
+			img = Image.new.build_info(url, website, post)
+
+			img.key.should == fake_date.to_i.to_s + "_" + "abc_jhvg_emil123.jpg"
 		end
 	end
 

@@ -58,7 +58,7 @@ namespace :forums do
 
   def scrap_forum(forum_page, website, scrapping, previous_scrapping_date)
     doc = forum_page.parser
-    links = doc.xpath('//tr[@class=""]//td[@class="title"]//a').map { |i| i[:href]}
+    links = doc.xpath('//tr[@class=""]//td[@class="title"]//a').reject {|i| i[:href].include?("page:")}.map { |i| i[:href]}
     links.each do |link|
       post_page = forum_page.link_with(:href => link).click
       #scrap_post_direct_images(post_page, website, scrapping, previous_scrapping_date)
@@ -104,8 +104,11 @@ namespace :forums do
         end
       end
     end
+
+    next_link = post_page.link_with(:text => "»")
+    if next_link
+      post_page = next_link.click
+      scrap_post_hosted_images(post_page, website, scrapping, previous_scrapping_date)
+    end    
   end
-
-
-
 end

@@ -70,16 +70,21 @@ class Image
   end
 
   def download(page_image=nil)
-    if page_image
-      page_image.fetch.save image_save_path
-    else
-      open(image_save_path, 'wb') do |file|
-        file << open(source_url, :allow_redirections => :all).read
+    begin
+      if page_image
+        page_image.fetch.save image_save_path
+      else
+        open(image_save_path, 'wb') do |file|
+          file << open(source_url, :allow_redirections => :all).read
+        end
       end
+      
+      generate_thumb
+      set_image_info
+    rescue Timeout::Error => e
+      Rails.logger.error e.to_s
+      save!
     end
-    
-    generate_thumb
-    set_image_info
   end
 
 end

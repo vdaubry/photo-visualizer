@@ -67,5 +67,16 @@ describe Image do
 			image.width.should == 1200
 			image.height.should == 780
 		end
+
+		context "open uri times out" do
+			it "saves the file without image" do
+				image = FactoryGirl.build(:image, :key => "calinours.jpg")
+				image.stubs(:open).raises(Timeout::Error)
+
+				image.download
+
+				image.persisted?.should == true
+			end
+		end
 	end
 end

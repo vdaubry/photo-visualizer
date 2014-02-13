@@ -68,14 +68,22 @@ describe Image do
 			image.height.should == 780
 		end
 
-		context "open uri times out" do
-			it "saves the file without image" do
-				image = FactoryGirl.build(:image, :key => "calinours.jpg")
+		context "raises exception" do
+			let(:image) { FactoryGirl.build(:image, :key => "calinours.jpg") }
+			
+			it "catches timeout error" do
 				image.stubs(:open).raises(Timeout::Error)
-
 				image.download
+			end
 
-				image.persisted?.should == false
+			it "catches 404 error" do
+				image.stubs(:open).raises(OpenURI::HTTPError)
+				image.download
+			end
+
+			it "catches file not found" do
+				image.stubs(:open).raises(Errno::ENOENT)
+				image.download
 			end
 		end
 	end

@@ -86,7 +86,7 @@ class Image
       
       generate_thumb
       set_image_info
-    rescue Timeout::Error, OpenURI::HTTPError, Errno::ENOENT => e
+    rescue StandardError => e
       Rails.logger.error e.to_s
     end
   end

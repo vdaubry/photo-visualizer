@@ -6,7 +6,12 @@ class PostsController < ApplicationController
     @post.images.where(:status => Image::TO_SORT_STATUS).update_all(:status => Image::TO_DELETE_STATUS)
     @post.update_attributes(:status => Post::SORTED_STATUS)
 
-    redirect_to website_post_images_path(@website, @website.latest_post)
+    latest_post = @website.latest_post
+    if latest_post
+      redirect_to website_post_images_path(@website, latest_post)
+    else
+      redirect_to root_path
+    end
   end
 
 	private

@@ -18,4 +18,14 @@ describe Post do
 			it { FactoryGirl.build(:post, :status => "foo").save.should == false }
 		end
 	end
+
+	describe "scopes" do
+		before(:each) do
+			@post_to_sort = FactoryGirl.create(:post, :status => Post::TO_SORT_STATUS)
+			@sorted_post = FactoryGirl.create(:post, :status => Post::SORTED_STATUS)
+		end
+
+		it {Post.to_sort.should == [@post_to_sort]}
+		it {Post.sorted.should == [@sorted_post]}
+	end
 end

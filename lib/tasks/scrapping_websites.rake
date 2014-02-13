@@ -54,11 +54,13 @@ namespace :websites do
   	
   	top_page = page.link_with(:text => top_link).click
 
-  	images_saved=0
+    images_saved = 0
   	(1..12).each do |category_number|
       category_name = YAML.load_file('config/websites.yml')["website1"]["category#{category_number}"]
-  		images_saved += scrap_category(top_page, category_name, previous_month, website, scrapping) 
+  		scrap_category(top_page, category_name, previous_month, website, scrapping) 
+      images_saved+=post.where(:name => "#{category_name}_#{previous_month.strftime("%Y_%B")}").images.count
   	end
+
 
   	scrapping.update_attributes(
   	  success: true,
@@ -79,7 +81,6 @@ namespace :websites do
    	link_reg_exp = YAML.load_file('config/websites.yml')["website1"]["link_reg_exp"]
    	links = page.links_with(:href => %r{#{link_reg_exp}})#[0..1]
    	pp "Found #{links.count} links" 
-   	images_saved = 0
    	links.each do |link|
    		page = link.click
    		page_image = page.image_with(:src => %r{/norm/})
@@ -91,7 +92,6 @@ namespace :websites do
           image = Image.new.build_info(url, website, post)
           pp "Save #{image.key}"
           image.download
-          images_saved+=1
           sleep(1)
         end
       end
@@ -99,7 +99,6 @@ namespace :websites do
    	end
 
     post.destroy if post.images.count==0
-   	images_saved
   end
 
 
@@ -128,14 +127,15 @@ namespace :websites do
     excluded_urls = YAML.load_file('config/websites.yml')["website2"]["excluded_urls"]
 
     links = home_page.links.map {|link| link if link.text.present? && !excluded_urls.any? {|s| link.href.include?(s)} && link.href.size>1}.compact
-    images_saved=0
+    
     links.each do |link|
       post_name = link.text
       post = website.posts.find_or_create_by(:name => post_name)
       post.update_attributes(:scrapping => new_scrapping, :status => Post::TO_SORT_STATUS)
-      images_saved+=scrap_page(link, post, website, previous_scrapping_date)
+      scrap_page(link, post, website, previous_scrapping_date)
     end
 
+    images_saved=post.images.count
     new_scrapping.update_attributes(
       success: true,
       duration: DateTime.now-start_time,
@@ -164,11 +164,11 @@ namespace :websites do
     post = website.posts.find_or_create_by(:name => post_name)
     post.update_attributes(:scrapping => new_scrapping, :status => Post::TO_SORT_STATUS)
 
-    images_saved=0
-    images_saved+=scrap_current_page(page, 50.years.ago, website, post, images_saved)
+    scrap_current_page(page, 50.years.ago, website, post)
 
     post.destroy if post.images.count==0
 
+    images_saved = post.images.count
     new_scrapping.update_attributes(
       success: true,
       duration: DateTime.now-start_time,
@@ -180,14 +180,10 @@ namespace :websites do
   def scrap_page(link, post, website, previous_scrapping_date)
     pp "Scrap : #{post.name} since #{previous_scrapping_date}"
     page = link.click
-    images_saved=0
-    images_saved = scrap_current_page(page, previous_scrapping_date, website, post, images_saved)
-
-    puts "images_saved = #{images_saved}"
-    images_saved
+    scrap_current_page(page, previous_scrapping_date, website, post)
   end
 
-  def scrap_current_page(page, previous_scrapping_date, website, post, images_saved)
+  def scrap_current_page(page, previous_scrapping_date, website, post)
     #check current page date 
     doc = page.parser
     pid = doc.css("div.pic").first.children[1].text.split("id. ").last
@@ -211,7 +207,6 @@ namespace :websites do
           image = Image.new.build_info(url, website, post)
           pp "Save #{image.key}"
           image.download
-          images_saved+=1
           sleep(1)
         end
       end
@@ -224,10 +219,8 @@ namespace :websites do
         lastpid = button.attr("onclick").scan(/[0-9]/).join
         post_url = YAML.load_file('config/websites.yml')["website2"]["post_url"]
         page = browser.post(post_url, {"req" => "morepics", "cid" => cid, "lastpid" => lastpid})
-        images_saved = scrap_current_page(page, previous_scrapping_date, website, post, images_saved)
+        scrap_current_page(page, previous_scrapping_date, website, post)
       end
     end
-
-    images_saved
   end
 end

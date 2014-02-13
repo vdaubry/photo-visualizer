@@ -19,13 +19,18 @@ class Image
   field :width, type: Integer
   field :height, type: Integer
   field :source_url, type: String
+  field :hosting_url, type: String
 
   validates :key, :image_hash, :status, :file_size, :width, :height, :source_url, :website, presence: true, allow_blank: false, allow_nil: false
   validates_inclusion_of :status, in: [ TO_KEEP_STATUS, TO_SORT_STATUS, TO_DELETE_STATUS, DELETED_STATUS, KEPT_STATUS ]
 
+  scope :to_sort, -> {where(:status => TO_SORT_STATUS)}
+  scope :to_keep, -> {where(:status => TO_KEEP_STATUS)}
+  scope :to_delete, -> {where(:status => TO_DELETE_STATUS)}
 
-  def build_info(source_url, website, post)
+  def build_info(source_url, hosting_url=nil, website, post)
     self.source_url = source_url
+    self.hosting_url = hosting_url
     self.website = website
     self.key = (DateTime.now.to_i.to_s + "_" + File.basename(URI.parse(source_url).path)).gsub('-', '_').gsub(/[^0-9A-Za-z_\.]/, '')
     self.status = Image::TO_SORT_STATUS
@@ -81,9 +86,8 @@ class Image
       
       generate_thumb
       set_image_info
-    rescue Timeout::Error => e
+    rescue Timeout::Error, OpenURI::HTTPError, Errno::ENOENT => e
       Rails.logger.error e.to_s
-      save!
     end
   end
 

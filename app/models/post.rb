@@ -11,9 +11,10 @@ class Post
   belongs_to :website
   
   validate :unique_name_per_scrapping, :on => :create
-
-
   validates_inclusion_of :status, in: [ TO_SORT_STATUS, SORTED_STATUS ]
+
+  scope :to_sort, -> {where(:status => TO_SORT_STATUS)}
+  scope :sorted, -> {where(:status => SORTED_STATUS)}
 
   def check_status!
     self.update_attributes(:status => Post::SORTED_STATUS) if self.images.where(:status => Image::TO_SORT_STATUS).count == 0

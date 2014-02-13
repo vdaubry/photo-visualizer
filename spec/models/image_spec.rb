@@ -75,8 +75,20 @@ describe Image do
 
 				image.download
 
-				image.persisted?.should == true
+				image.persisted?.should == false
 			end
 		end
+	end
+
+	describe "scopes" do
+		before(:each) do
+			@img_to_sort = FactoryGirl.create(:image, :status => Image::TO_SORT_STATUS)
+			@img_to_keep = FactoryGirl.create(:image, :status => Image::TO_KEEP_STATUS)
+			@img_to_delete = FactoryGirl.create(:image, :status => Image::TO_DELETE_STATUS)
+		end
+
+		it {Image.to_sort.should == [@img_to_sort]}
+		it {Image.to_keep.should == [@img_to_keep]}
+		it {Image.to_delete.should == [@img_to_delete]}
 	end
 end

@@ -97,6 +97,8 @@ namespace :websites do
       end
    		
    	end
+
+    post.destroy if post.images.count==0
    	images_saved
   end
 
@@ -164,6 +166,8 @@ namespace :websites do
 
     images_saved=0
     images_saved+=scrap_current_page(page, 50.years.ago, website, post, images_saved)
+
+    post.destroy if post.images.count==0
 
     new_scrapping.update_attributes(
       success: true,

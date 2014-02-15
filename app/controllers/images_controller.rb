@@ -15,7 +15,7 @@ class ImagesController < ApplicationController
     if status==Image::TO_SORT_STATUS
       @images = @post.images.where(:status => status).asc(:created_at).page(params[:page])
     else 
-      @images = @website.images.where(:status => status).asc(:updated_at).page(params[:page])
+      @images = @website.images.where(:status => status).desc(:updated_at).page(params[:page])
     end
   end
 
@@ -68,7 +68,7 @@ class ImagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_image
-      @image = @post.images.find(params[:id])
+      @image = Image.find(params[:id])
     end
 
     def set_post

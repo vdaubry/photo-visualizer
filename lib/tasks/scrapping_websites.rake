@@ -61,7 +61,6 @@ namespace :websites do
       images_saved+=post.where(:name => "#{category_name}_#{previous_month.strftime("%Y_%B")}").images.count
   	end
 
-
   	scrapping.update_attributes(
   	  success: true,
   	  duration: DateTime.now-start_time,
@@ -128,14 +127,16 @@ namespace :websites do
 
     links = home_page.links.map {|link| link if link.text.present? && !excluded_urls.any? {|s| link.href.include?(s)} && link.href.size>1}.compact
     
+    posts = []
     links.each do |link|
       post_name = link.text
       post = website.posts.find_or_create_by(:name => post_name)
       post.update_attributes(:scrapping => new_scrapping, :status => Post::TO_SORT_STATUS)
+      posts << post
       scrap_page(link, post, website, previous_scrapping_date)
     end
 
-    images_saved=post.images.count
+    images_saved=posts.inject(0){|res, post| res + post.images.count}
     new_scrapping.update_attributes(
       success: true,
       duration: DateTime.now-start_time,

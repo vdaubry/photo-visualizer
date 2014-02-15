@@ -54,7 +54,6 @@ class Image
     "to_sort/thumbnails/300"
   end  
 
-
   def image_save_path
     "#{Image.image_path}/#{self[:key]}"
   end
@@ -71,7 +70,12 @@ class Image
     self.width = FastImage.size(image_save_path)[0]
     self.height = FastImage.size(image_save_path)[1]
     self.file_size = image_file.size
-    save!
+
+    if self.width > 300 && self.height > 300
+      save!
+    else
+      destroy
+    end
   end
 
   def download(page_image=nil)
@@ -87,6 +91,7 @@ class Image
       generate_thumb
       set_image_info
     rescue StandardError => e
+      puts "error = #{e.to_s}"
       Rails.logger.error e.to_s
     end
   end

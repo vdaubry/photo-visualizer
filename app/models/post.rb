@@ -6,6 +6,7 @@ class Post
   include Mongoid::Timestamps
   field :name, type: String
   field :status, type: String, default: Post::TO_SORT_STATUS
+  field :pages_url, type: Array
   has_many :images
   belongs_to :scrapping
   belongs_to :website
@@ -15,6 +16,7 @@ class Post
 
   scope :to_sort, -> {where(:status => TO_SORT_STATUS)}
   scope :sorted, -> {where(:status => SORTED_STATUS)}
+  scope :with_page_url, ->(url) {where(:pages_url.in => [url])}
 
   def check_status!
     self.update_attributes(:status => Post::SORTED_STATUS) if self.images.where(:status => Image::TO_SORT_STATUS).count == 0

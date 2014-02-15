@@ -68,6 +68,28 @@ describe Image do
 			image.height.should == 780
 		end
 
+		it "assigns image to post" do
+			post1 = FactoryGirl.create(:post)
+			website1 = FactoryGirl.create(:website)
+			url = "http://foo.bar"
+			image = Image.new.build_info(url, website1, post1)
+			Image.stubs(:image_path).returns("lib")
+			Image.stubs(:thumbnail_path).returns("spec/ressources")
+			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
+			image.stubs(:image_save_path).returns("ressources/calinours.jpg")
+
+			image.download
+			image.persisted?.should == true
+
+			saved_image = Image.find(image.id)
+			saved_image.post.should == post1
+			saved_image.website.should == website1
+			saved_image.source_url.should == url
+
+			post1.images.should == [image]
+			website1.images.should == [image]
+		end
+
 		context "raises exception" do
 			let(:image) { FactoryGirl.build(:image, :key => "calinours.jpg") }
 			

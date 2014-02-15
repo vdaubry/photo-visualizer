@@ -71,11 +71,17 @@ class Image
     self.height = FastImage.size(image_save_path)[1]
     self.file_size = image_file.size
 
-    if self.width >= 300 && self.height >= 300
-      save!
-    else
+    if image_invalid?
       destroy
+    else
+      save!
     end
+  end
+
+  def image_invalid?
+    too_small = (self.width < 300 || self.height < 300)
+    already_downloaded = Image.where(:image_hash => image_hash).count > 0
+    (too_small || already_downloaded)
   end
 
   def download(page_image=nil)

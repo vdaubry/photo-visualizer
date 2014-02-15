@@ -87,8 +87,8 @@ namespace :forums do
 
           if page_images.blank?
             page_images = browser.images.select {|i| (i.url.to_s.downcase =~ /jpg|jpeg|png/).present? }
-            page_images.reject! {|s| %w(rating).any? {|t| s.text.downcase.include?(t)} }
-            page_images.reject! {|s| %w(logo register banner imgbox.png thumbnail adhance).any? { |w| s.url.to_s.include?(w)}}
+            page_images.reject! {|s| %w(rating layout).any? {|t| s.text.downcase.include?(t)} }
+            page_images.reject! {|s| %w(logo register banner imgbox.png thumbnail adhance offline medal top bottom male female promotext close btn home).any? { |w| s.url.to_s.include?(w)}}
           end
 
           pp "No images found at : #{host_url}" if page_images.blank?
@@ -124,9 +124,7 @@ namespace :forums do
       #if not_scrapped
         post.add_to_set(pages_url: next_link_url)
         post.save!
-
-        pp "pages_url = #{post.pages_url}"
-
+        
         post_page = next_link.click
         scrap_post_hosted_images(post_page, website, scrapping, previous_scrapping_date)
       #end
@@ -219,11 +217,11 @@ namespace :forums do
 
     post.update_attributes(:status => Post::SORTED_STATUS) if post.images.count==0
 
-    next_link = post_page.link_with(:text => "Next»")
-    if next_link
-      post_page = next_link.click
-      scrap_post_hosted_images(post_page, website, scrapping, previous_scrapping_date)
-    end
+    # next_link = post_page.link_with(:text => "Next»")
+    # if next_link
+    #   post_page = next_link.click
+    #   scrap_mp_post_direct_images(post_page, website, scrapping, previous_scrapping_date)
+    # end
   end
 
 
@@ -235,6 +233,8 @@ namespace :forums do
     doc = post_page.parser
     links = doc.xpath('//div[contains(@class, "post-body")]//a')
     host_urls = links.select {|link| link.search('img').present?}.map { |link| link[:href] }.select {|s| s.include?("http")}.compact.reject {|u| Image.where(:hosting_url => u).first.present?}
+
+    pp "Found #{host_urls.count} images in #{post_page.uri.to_s}"
 
     host_urls.each do |host_url|
       begin

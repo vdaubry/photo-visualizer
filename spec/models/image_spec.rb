@@ -55,17 +55,14 @@ describe Image do
 
 	describe "download" do
 		it "saves file" do
-			image = FactoryGirl.create(:image, :key => "calinours.jpg")
+			image = FactoryGirl.build(:image, :key => "calinours.jpg")
 			Image.stubs(:image_path).returns("spec/ressources")
 			Image.stubs(:thumbnail_path).returns("spec/ressources/thumb")
 			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
 
 			image.download
 
-			image.image_hash.should == "a1e4b773a5cd2941a4a442b7309c8ced"
-			image.file_size.should == 197890
-			image.width.should == 1200
-			image.height.should == 780
+			image.persisted?.should == true
 		end
 
 		it "assigns image to post" do
@@ -80,7 +77,6 @@ describe Image do
 			image.stubs(:image_save_path).returns("spec/ressources/calinours.jpg")
 
 			image.download
-			image.persisted?.should == true
 
 			saved_image = Image.find(image.id)
 			saved_image.post.should == post1
@@ -121,5 +117,53 @@ describe Image do
 		it {Image.to_sort.should == [@img_to_sort]}
 		it {Image.to_keep.should == [@img_to_keep]}
 		it {Image.to_delete.should == [@img_to_delete]}
+	end
+
+	describe "set_image_info" do
+		let(:image) { FactoryGirl.build(:image, :key => "calinours.jpg") }
+
+		it  {
+			image.stubs(:image_save_path).returns("spec/ressources/calinours.jpg")
+
+			image.set_image_info
+
+			image.image_hash.should == "a1e4b773a5cd2941a4a442b7309c8ced"
+			image.file_size.should == 197890
+			image.width.should == 1200
+			image.height.should == 780
+		}
+		
+		context "valid image" do
+			it "saves image" do
+				image.stubs(:image_invalid?).returns(false)
+
+				image.set_image_info
+
+				image.persisted?.should == true
+			end
+		end
+
+		context "invalid image" do
+			it "saves image" do
+				image.stubs(:image_invalid?).returns(true)
+
+				image.set_image_info
+
+				image.persisted?.should == false
+			end
+		end
+	end
+
+	describe "image_invalid?" do
+		it { FactoryGirl.build(:image).image_invalid?.should == false }
+
+		it { FactoryGirl.build(:image, :width => 200).image_invalid?.should == true }
+
+		it { FactoryGirl.build(:image, :height => 200).image_invalid?.should == true }
+
+		it { 
+			FactoryGirl.create(:image, :image_hash => "foo")
+			FactoryGirl.build(:image, :image_hash => "foo").image_invalid?.should == true
+		}
 	end
 end

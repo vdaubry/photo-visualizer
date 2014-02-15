@@ -56,8 +56,8 @@ describe Image do
 	describe "download" do
 		it "saves file" do
 			image = FactoryGirl.create(:image, :key => "calinours.jpg")
-			Image.stubs(:image_path).returns("lib")
-			Image.stubs(:thumbnail_path).returns("spec/ressources")
+			Image.stubs(:image_path).returns("spec/ressources")
+			Image.stubs(:thumbnail_path).returns("spec/ressources/thumb")
 			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
 
 			image.download
@@ -73,10 +73,11 @@ describe Image do
 			website1 = FactoryGirl.create(:website)
 			url = "http://foo.bar"
 			image = Image.new.build_info(url, website1, post1)
-			Image.stubs(:image_path).returns("lib")
-			Image.stubs(:thumbnail_path).returns("spec/ressources")
-			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
-			image.stubs(:image_save_path).returns("ressources/calinours.jpg")
+			image.key="calinours.jpg"
+			Image.stubs(:image_path).returns("spec/ressources")
+			Image.stubs(:thumbnail_path).returns("spec/ressources/thumb")
+			image.stub_chain(:open, :read) { File.open("spec/ressources/calinours.jpg").read }
+			image.stubs(:image_save_path).returns("spec/ressources/calinours.jpg")
 
 			image.download
 			image.persisted?.should == true

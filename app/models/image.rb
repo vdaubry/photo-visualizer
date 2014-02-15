@@ -71,7 +71,7 @@ class Image
     self.height = FastImage.size(image_save_path)[1]
     self.file_size = image_file.size
 
-    if self.width > 300 && self.height > 300
+    if self.width >= 300 && self.height >= 300
       save!
     else
       destroy
@@ -91,7 +91,6 @@ class Image
       generate_thumb
       set_image_info
     rescue StandardError => e
-      puts "error = #{e.to_s}"
       Rails.logger.error e.to_s
     end
   end

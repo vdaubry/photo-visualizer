@@ -56,8 +56,8 @@ describe Image do
 	describe "download" do
 		it "saves file" do
 			image = FactoryGirl.create(:image, :key => "calinours.jpg")
-			Image.stubs(:image_path).returns("lib")
-			Image.stubs(:thumbnail_path).returns("spec/ressources")
+			Image.stubs(:image_path).returns("spec/ressources")
+			Image.stubs(:thumbnail_path).returns("spec/ressources/thumb")
 			image.stub_chain(:open, :read) { File.open("ressources/calinours.jpg").read }
 
 			image.download
@@ -66,6 +66,29 @@ describe Image do
 			image.file_size.should == 197890
 			image.width.should == 1200
 			image.height.should == 780
+		end
+
+		it "assigns image to post" do
+			post1 = FactoryGirl.create(:post)
+			website1 = FactoryGirl.create(:website)
+			url = "http://foo.bar"
+			image = Image.new.build_info(url, website1, post1)
+			image.key="calinours.jpg"
+			Image.stubs(:image_path).returns("spec/ressources")
+			Image.stubs(:thumbnail_path).returns("spec/ressources/thumb")
+			image.stub_chain(:open, :read) { File.open("spec/ressources/calinours.jpg").read }
+			image.stubs(:image_save_path).returns("spec/ressources/calinours.jpg")
+
+			image.download
+			image.persisted?.should == true
+
+			saved_image = Image.find(image.id)
+			saved_image.post.should == post1
+			saved_image.website.should == website1
+			saved_image.source_url.should == url
+
+			post1.images.should == [image]
+			website1.images.should == [image]
 		end
 
 		context "raises exception" do

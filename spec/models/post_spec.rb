@@ -28,4 +28,51 @@ describe Post do
 		it {Post.to_sort.should == [@post_to_sort]}
 		it {Post.sorted.should == [@sorted_post]}
 	end
+
+	describe "pages_url" do
+		let(:post) { FactoryGirl.create(:post) }
+
+		it "contains multiple urls" do
+			post.push(pages_url: "http://foo.bar")
+			post.push(pages_url: "http://foo.bar")
+			post.save!
+			Post.find(post.id).pages_url.count.should == 2
+		end
+
+		it "finds existing url" do
+			post.pages_url.push "http://foo.bar"
+			post.pages_url.push "http://otherfoo.bar2"
+			post.save!
+			Post.where(:pages_url.in => ["http://foo.bar"]).entries.should == [post]
+			Post.where(:pages_url.in => ["http://otherfoo.bar2"]).entries.should == [post]
+		end
+
+		describe "add_to_set" do
+			it "adds unique values" do
+				post.add_to_set(pages_url: "http://foo.bar")
+				post.add_to_set(pages_url: "http://foo.bar")
+				post.save!
+				Post.find(post.id).pages_url.count.should == 1
+			end
+
+			it "finds existing url" do
+				post.add_to_set(pages_url: "http://foo.bar")
+				post.add_to_set(pages_url: "http://foo.bar")
+				post.save!
+				Post.where(:pages_url.in => ["http://foo.bar"]).entries.should == [post]
+				Post.where(:pages_url.in => ["http://otherfoo.bar2"]).entries.should == []
+			end
+		end
+	end
+
+	describe "with_page_url" do
+		let(:post) { FactoryGirl.create(:post) }
+		
+		it "returns posts wich contains the url" do
+			post.pages_url.push "http://foo.bar"
+			post.save!
+			Post.with_page_url("http://foo.bar").entries.should == [post]
+			Post.with_page_url("foo.bar").entries.should == []
+		end
+	end
 end

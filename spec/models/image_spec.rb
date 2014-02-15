@@ -122,9 +122,11 @@ describe Image do
 	describe "set_image_info" do
 		let(:image) { FactoryGirl.build(:image, :key => "calinours.jpg") }
 
-		it  {
+		before(:each) do
 			image.stubs(:image_save_path).returns("spec/ressources/calinours.jpg")
+		end
 
+		it  {
 			image.set_image_info
 
 			image.image_hash.should == "a1e4b773a5cd2941a4a442b7309c8ced"

@@ -35,7 +35,7 @@ namespace :forums do
     pp "Sign in user : #{user}"
     home_page = Mechanize.new.get(url)
 
-    sign_in_page = home_page.links.find { |l| l.text == 'Log-in' }.click
+    sign_in_page = home_page.link_with(:text => 'Log-in').click
     forums_page = sign_in_page.form_with(:name => nil) do |form|
       form.fields.second.value = user
       form.fields.third.value = password
@@ -241,7 +241,7 @@ namespace :forums do
         browser = Mechanize.new.get(host_url)        
         page_images = browser.images.select {|i| (i.url.to_s.downcase =~ /jpg|jpeg|png/).present? }
         page_images.reject! {|s| %w(rating).any? {|t| s.text.downcase.include?(t)} }
-        page_images.reject! {|s| %w(logo register banner imgbox.png thumbnail adhance).any? { |w| s.url.to_s.include?(w)}}
+        page_images.reject! {|s| %w(logo register banner imgbox.png thumbnail adhance thumbs).any? { |w| s.url.to_s.include?(w)}}
         
         pp "No images found at : #{host_url}" if page_images.blank?
         

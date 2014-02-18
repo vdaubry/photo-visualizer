@@ -36,6 +36,7 @@ gem 'mini_magick', '~> 3.7.0'
 gem 'kaminari', '~> 0.15.1'
 gem 'newrelic_rpm', '~> 3.7.2.192'
 gem 'open_uri_redirections', '~> 0.1.4'
+gem 'unicorn', '~> 4.8.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

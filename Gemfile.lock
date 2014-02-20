@@ -210,7 +210,7 @@ PLATFORMS
 
 DEPENDENCIES
   blockuijs-rails!
-  coffee-rails (~> 4.0.0)
+  coffee-rails (~> 4.0.1)
   factory_girl_rails
   fastimage (~> 1.6.0)
   jbuilder (~> 2.0.3)
@@ -225,10 +225,10 @@ DEPENDENCIES
   open_uri_redirections (~> 0.1.4)
   rails (~> 4.0.3)
   rspec-rails
-  sass-rails (~> 4.0.0)
+  sass-rails (~> 4.0.1)
   sdoc
   therubyracer (~> 0.12.1)
-  turbolinks (~> 2.2.1)
+  turbolinks (= 2.2.1)
   twitter-bootstrap-rails (~> 2.2.8)
   uglifier (>= 1.3.0)
   unicorn (~> 4.8.2)

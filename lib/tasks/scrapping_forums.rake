@@ -88,7 +88,7 @@ namespace :forums do
           if page_images.blank?
             page_images = browser.images.select {|i| (i.url.to_s.downcase =~ /jpg|jpeg|png/).present? }
             page_images.reject! {|s| %w(rating layout).any? {|t| s.text.downcase.include?(t)} }
-            page_images.reject! {|s| %w(logo register banner imgbox.png thumbnail adhance offline medal top bottom male female promotext close btn home).any? { |w| s.url.to_s.include?(w)}}
+            page_images.reject! {|s| %w(logo counter register banner imgbox.png thumbnail adhance offline medal top bottom male female promotext close btn home).any? { |w| s.url.to_s.include?(w)}}
           end
 
           pp "No images found at : #{host_url}" if page_images.blank?
@@ -107,7 +107,7 @@ namespace :forums do
         if Image.where(:source_url => url).first.nil?
           image = Image.new.build_info(url, host_url, website, post)
           pp "Save #{image.key}"
-          image.download
+          image.download(page_image)
           sleep(1)
         end
       end
@@ -123,7 +123,7 @@ namespace :forums do
       pp "already_scrapped = #{!not_scrapped}"
       #if not_scrapped
         post.add_to_set(pages_url: next_link_url)
-        post.save!
+        post.save
         
         post_page = next_link.click
         scrap_post_hosted_images(post_page, website, scrapping, previous_scrapping_date)

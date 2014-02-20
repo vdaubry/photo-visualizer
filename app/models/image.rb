@@ -80,14 +80,16 @@ class Image
 
   def image_invalid?
     too_small = (self.width < 300 || self.height < 300)
+    Rails.logger.warn "Too small" if too_small
     already_downloaded = Image.where(:image_hash => image_hash).count > 0
+    Rails.logger.warn "already_downloaded" if already_downloaded
     (too_small || already_downloaded)
   end
 
   def download(page_image=nil)
     begin
       if page_image
-        page_image.fetch.save image_save_path
+        page_image.fetch.save image_save_path #To protect from hotlinking we reuse the same session
       else
         open(image_save_path, 'wb') do |file|
           file << open(source_url, :allow_redirections => :all).read

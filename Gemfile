@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.2'
+gem 'rails', '~> 4.0.3'
 
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
-gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails', '~> 2.2.8'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -18,7 +18,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', '~> 0.12.1', platforms: :ruby
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 3.1.0'
 gem 'blockuijs-rails',  :git => 'git://github.com/rusanu/blockuijs-rails.git'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -26,16 +26,17 @@ gem 'turbolinks', '~> 2.2.1'
 gem 'mail', git: 'git://github.com/pwnall/mail', :ref => 'd367c0827b10161d7cc42fd22237daa9a7cedafd' #Fixes mail dependency with mimetypes 1.x which conflicts with Mechanize dependency on mimetypes 2.x => https://github.com/mikel/mail/issues/641
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0.2'
+gem 'jbuilder', '~> 2.0.3'
 
 gem 'mongoid', git: 'git://github.com/mongoid/mongoid.git'
 
 gem 'mechanize', '~> 2.7.3'
-gem 'fastimage'
+gem 'fastimage', '~> 1.6.0'
 gem 'mini_magick', '~> 3.7.0'
 gem 'kaminari', '~> 0.15.1'
-gem 'newrelic_rpm', '~> 3.7.2.192'
+gem 'newrelic_rpm', '~> 3.7.2.195'
 gem 'open_uri_redirections', '~> 0.1.4'
+gem 'unicorn', '~> 4.8.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

@@ -29,6 +29,7 @@ gem 'jbuilder', '~> 2.0.3'
 
 gem 'mongoid', git: 'git://github.com/mongoid/mongoid.git'
 
+gem 'figaro', '~> 0.7.0'
 gem 'httparty', '0.13.0'
 gem 'mechanize', '~> 2.7.3'
 gem 'fastimage', '~> 1.6.0'

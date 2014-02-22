@@ -78,6 +78,9 @@ GEM
       railties (>= 3.0.0)
     fastimage (1.6.0)
       addressable (~> 2.3, >= 2.3.5)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     hike (1.2.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -223,6 +226,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.1)
   factory_girl_rails
   fastimage (~> 1.6.0)
+  figaro (~> 0.7.0)
   httparty (= 0.13.0)
   jbuilder (~> 2.0.3)
   jquery-rails (~> 3.1.0)

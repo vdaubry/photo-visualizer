@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-PhotoVisualizer::Application.config.secret_key_base = '32e0f30fb361d902d5561e55127288fdc3db525e1afc20d2a914c31fc566102708e06170b1a99a66f901e1e917a59ad358463ff114a12e4c52161af9f1cbadeb'
+PhotoVisualizer::Application.config.secret_key_base = Rails.env.production? ? ENV['SECRET_KEY_BASE'] : ('x' * 30) # meets minimum requirement of 30 chars long

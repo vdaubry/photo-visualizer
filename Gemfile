@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.0.3'
 
-
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.1'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
@@ -30,6 +29,7 @@ gem 'jbuilder', '~> 2.0.3'
 
 gem 'mongoid', git: 'git://github.com/mongoid/mongoid.git'
 
+gem 'httparty', '0.13.0'
 gem 'mechanize', '~> 2.7.3'
 gem 'fastimage', '~> 1.6.0'
 gem 'mini_magick', '~> 3.7.0'
@@ -44,8 +44,9 @@ group :doc do
 end
 
 group :test do
+  gem "webmock", '~> 1.17.3'
 	gem "mocha", '~> 1.0.0'
-  gem "rspec-rails"
+  gem "rspec-rails", '~> 2.14.1'
   gem 'factory_girl_rails'
 end
 

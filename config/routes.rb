@@ -1,7 +1,6 @@
 PhotoVisualizer::Application.routes.draw do
   root 'websites#index'
 
-
   resources :websites do
     resources :posts, :only => :destroy do
       resources :images do

@@ -77,4 +77,6 @@ PhotoVisualizer::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  PHOTO_DOWNLOADER_URL = "http://localhost:3002"
 end

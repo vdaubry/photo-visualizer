@@ -26,4 +26,6 @@ PhotoVisualizer::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  PHOTO_DOWNLOADER_URL = "http://localhost:3002"
 end

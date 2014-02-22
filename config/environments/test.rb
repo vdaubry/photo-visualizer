@@ -33,4 +33,6 @@ PhotoVisualizer::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  PHOTO_DOWNLOADER_URL = "http://localhost:3002"
 end

@@ -46,4 +46,5 @@ RSpec.configure do |config|
   config.after(:each) do
     Mongoid::Sessions.default.collections.select {|c| c.name !~ /system/}.each {|c| c.find.remove_all}
   end
+  
 end

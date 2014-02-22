@@ -13,7 +13,7 @@
   <tbody>
     <% @websites.each do |website| %>
       <tr>
-        <td><%= link_to website["name"], website_post_images_path(website, website["latest_post_id"]) if website["latest_post_id"].present? %></td>
+        <td><%= link_to website["name"], website_post_images_path(website["id"], website["latest_post_id"]) if website["latest_post_id"].present? %></td>
         <td><%= website["url"] %></td>
         <td><%= website["images_to_sort_count"] %></td>
         <td><%= website["last_scrapping_date"] %></td>

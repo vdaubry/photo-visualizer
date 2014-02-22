@@ -1,6 +1,7 @@
 class WebsitesController < ApplicationController
   def index
     resp = HTTParty.get("#{PHOTO_DOWNLOADER_URL}/websites.json")
-    @websites = JSON.parse(resp)
+
+    @websites = JSON.parse(resp.body)["websites"]
   end
 end

@@ -28,4 +28,5 @@ PhotoVisualizer::Application.configure do
   config.assets.debug = true
 
   PHOTO_DOWNLOADER_URL = "http://localhost:3002"
+  NGINX_URL = "http://84.103.194.37"
 end

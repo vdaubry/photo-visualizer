@@ -27,13 +27,8 @@ gem 'mail', git: 'git://github.com/pwnall/mail', :ref => 'd367c0827b10161d7cc42f
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0.3'
 
-gem 'mongoid', git: 'git://github.com/mongoid/mongoid.git'
-
 gem 'figaro', '~> 0.7.0'
 gem 'httparty', '0.13.0'
-gem 'mechanize', '~> 2.7.3'
-gem 'fastimage', '~> 1.6.0'
-gem 'mini_magick', '~> 3.7.0'
 gem 'kaminari', '~> 0.15.1'
 gem 'newrelic_rpm', '~> 3.7.2.195'
 gem 'open_uri_redirections', '~> 0.1.4'

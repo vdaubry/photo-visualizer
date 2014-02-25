@@ -4,33 +4,19 @@ class ImagesController < ApplicationController
     @website_id = params[:website_id]
     @post_id = params[:post_id]
 
-    resp = JSON.parse(HTTParty.get("#{PHOTO_DOWNLOADER_URL}/websites/#{@website_id}/posts/#{@post_id}/images.json"))
+    image_api = ImageAPI.new(@website_id, @post_id)
+    images = image_api.paginate(params[:page])
     
-    @to_sort_count = resp["meta"]["to_sort_count"]
-    @to_keep_count = resp["meta"]["to_keep_count"]
-    @to_delete_count = resp["meta"]["to_delete_count"]
+    @to_sort_count = images.to_sort_count
+    @to_keep_count = images.to_keep_count
+    @to_delete_count = images.to_delete_count
 
-    @images = resp["images"]
-
-
-    # status = params["status"].nil? ? Image::TO_SORT_STATUS : params["status"]
-    
-    # if status==Image::TO_SORT_STATUS
-    #   @images = @post.images.where(:status => status).asc(:created_at).page(params[:page])
-    # else 
-    #   @images = @website.images.where(:status => status).desc(:updated_at).page(params[:page])
-    # end
-  end
-
-  def show
+    @images = images.to_a
   end
 
   def update
-    @image.update_attributes(
-      status: Image::TO_KEEP_STATUS
-    )
-
-    @post.check_status!
+    @image_id = params[:id]
+    ImageAPI.new(params[:website_id], params[:post_id], @image_id).put
   end
 
   def destroy

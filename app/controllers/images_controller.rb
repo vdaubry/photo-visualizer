@@ -20,11 +20,8 @@ class ImagesController < ApplicationController
   end
 
   def destroy
-    @image.update_attributes(
-      status: Image::TO_DELETE_STATUS
-    )
-
-    @post.check_status!
+    @image_id = params[:id]
+    ImageAPI.new(params[:website_id], params[:post_id], @image_id).delete
   end
 
   def destroy_all

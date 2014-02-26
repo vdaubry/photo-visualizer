@@ -45,10 +45,17 @@ describe ImagesController do
 
       put 'update', :format => :js, :website_id => "123", :post_id => "456", :id => "789"
     end
-
   end
 
   describe "DELETE destroy" do
+    it "calls delete api" do
+      stub_request(:delete, "http://localhost:3002/websites/123/posts/456/image/789.json").
+         to_return(:status => 200)
+
+      ImageAPI.any_instance.expects(:delete)
+
+      delete 'destroy', :format => :js, :website_id => "123", :post_id => "456", :id => "789"
+    end
   end 
 
   describe "DELETE destroy_all" do

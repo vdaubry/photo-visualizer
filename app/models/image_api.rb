@@ -19,7 +19,9 @@ class ImageAPI
     self.class.put("/websites/#{website}/posts/#{post}/image/#{image}.json")
   end
 
-
+  def delete
+    self.class.delete("/websites/#{website}/posts/#{post}/image/#{image}.json")
+  end
 end
 
 class ImageIndex

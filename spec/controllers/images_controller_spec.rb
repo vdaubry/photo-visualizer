@@ -99,5 +99,13 @@ describe ImagesController do
   end
 
   describe "PUT redownload" do
+    it "calls delete api" do
+      stub_request(:put, "http://localhost:3002/websites/123/posts/456/image/789/redownload.json").
+         to_return(:status => 200)
+
+      ImageAPI.any_instance.expects(:redownload)
+
+      put 'redownload', :format => :js, :website_id => "123", :post_id => "456", :id => "789"
+    end
   end
 end

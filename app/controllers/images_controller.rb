@@ -36,6 +36,7 @@ class ImagesController < ApplicationController
   end 
 
   def redownload
-    @image.download
+    @image_id = params[:id]
+    ImageAPI.new(params[:website_id], params[:post_id], @image_id).redownload
   end
 end

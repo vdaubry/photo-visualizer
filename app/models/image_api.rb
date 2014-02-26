@@ -19,7 +19,19 @@ class ImageAPI
     self.class.put("/websites/#{website}/posts/#{post}/image/#{image}.json")
   end
 
+  def delete
+    self.class.delete("/websites/#{website}/posts/#{post}/image/#{image}.json")
+  end
 
+  def destroy_all(ids)
+    resp = self.class.delete("/websites/#{website}/posts/#{post}/images/destroy_all.json", {:ids => ids})
+    json = JSON.parse(resp)
+    json["next_post_id"]
+  end
+
+  def redownload
+    self.class.put("/websites/#{website}/posts/#{post}/image/#{image}/redownload.json")
+  end
 end
 
 class ImageIndex

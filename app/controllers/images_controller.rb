@@ -20,28 +20,23 @@ class ImagesController < ApplicationController
   end
 
   def destroy
-    @image.update_attributes(
-      status: Image::TO_DELETE_STATUS
-    )
-
-    @post.check_status!
+    @image_id = params[:id]
+    ImageAPI.new(params[:website_id], params[:post_id], @image_id).delete
   end
 
   def destroy_all
     ids = params["image"]["ids"] rescue nil
-    @website.images.where(:_id.in => ids).update_all(status: Image::TO_DELETE_STATUS) unless ids.nil?
-
-    @post.check_status!
-    next_post = @website.latest_post
+    next_post = ImageAPI.new(params[:website_id], params[:post_id], @image_id).destroy_all(ids)
 
     if next_post
-      redirect_to website_post_images_url(@website, next_post)
+      redirect_to website_post_images_url(params[:website_id], next_post)
     else
       redirect_to root_url
     end
   end 
 
   def redownload
-    @image.download
+    @image_id = params[:id]
+    ImageAPI.new(params[:website_id], params[:post_id], @image_id).redownload
   end
 end

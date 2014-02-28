@@ -9,8 +9,9 @@ describe ImagesController do
                       "meta":{"to_sort_count":995,"to_keep_count":0,"to_delete_count":0}}'}
 
     before(:each) do
-      stub_request(:get, "http://localhost:3002/websites/123/posts/456/images.json")
-      .to_return(:body => images_json, 
+      stub_request(:get, "http://localhost:3002/websites/123/posts/456/images.json?page=1&status=")
+      .to_return(:body => images_json,
+                  :headers => {"Content-Type" => 'application/json'},
                   :status => 200)
     end  
 
@@ -37,20 +38,37 @@ describe ImagesController do
   end
 
   describe "PUT update" do
-    it "calls put api" do
-      stub_request(:put, "http://localhost:3002/websites/123/posts/456/image/789.json").
-         to_return(:status => 200)
+    context "valid response" do
+      it "calls put api" do
+        stub_request(:put, "http://localhost:3002/websites/123/posts/456/images/789.json").
+           to_return(:headers => {"Content-Type" => 'application/json'},
+                    :body => '{"status":"ok"}', 
+                    :status => 200)
 
-      ImageAPI.any_instance.expects(:put)
+        ImageAPI.any_instance.expects(:put)
 
-      put 'update', :format => :js, :website_id => "123", :post_id => "456", :id => "789"
+        put 'update', :format => :js, :website_id => "123", :post_id => "456", :id => "789"
+      end
+    end
+
+    context "invalid response" do
+      it "renders error 422" do
+        stub_request(:put, "http://localhost:3002/websites/123/posts/456/images/789.json").
+           to_return(:headers => {"Content-Type" => 'application/json'},
+                    :status => 422)
+
+        ImageAPI.any_instance.expects(:put)
+
+        put 'update', :format => :js, :website_id => "123", :post_id => "456", :id => "789"
+      end
     end
   end
 
   describe "DELETE destroy" do
     it "calls delete api" do
-      stub_request(:delete, "http://localhost:3002/websites/123/posts/456/image/789.json").
-         to_return(:status => 200)
+      stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/789.json").
+         to_return(:headers => {"Content-Type" => 'application/json'},
+                    :status => 200)
 
       ImageAPI.any_instance.expects(:delete)
 
@@ -64,8 +82,9 @@ describe ImagesController do
 
 
     it "calls destroy_all api" do
-      stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/destroy_all.json").
+      stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/destroy_all.json?ids%5B0%5D=789").
          to_return(:body => with_next_post,
+                    :headers => {"Content-Type" => 'application/json'},
                     :status => 200)
 
       ImageAPI.any_instance.expects(:destroy_all).with(["789"])
@@ -75,20 +94,22 @@ describe ImagesController do
 
     context "has next_post" do
       it "returns next post" do
-        stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/destroy_all.json").
+        stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/destroy_all.json?ids%5B0%5D=789").
          to_return(:body => with_next_post,
+                    :headers => {"Content-Type" => 'application/json'},
                     :status => 200)
 
         delete 'destroy_all', :format => :js, :website_id => "123", :post_id => "456", :image => {:ids => ["789"]}
 
-        response.should redirect_to website_post_images_url("123", "530ba4234d61630836020000")
+        response.should redirect_to website_post_images_url("123", "530ba4234d61630836020000", :status => "TO_SORT_STATUS")
       end
     end
 
     context "no ids" do
       it "calls destroy_all api" do
-        stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/destroy_all.json").
+        stub_request(:delete, "http://localhost:3002/websites/123/posts/456/images/destroy_all.json?ids%5B0%5D=789").
          to_return(:body => without_next_post,
+                    :headers => {"Content-Type" => 'application/json'},
                     :status => 200)
 
         delete 'destroy_all', :format => :js, :website_id => "123", :post_id => "456", :image => {:ids => ["789"]}
@@ -100,8 +121,9 @@ describe ImagesController do
 
   describe "PUT redownload" do
     it "calls delete api" do
-      stub_request(:put, "http://localhost:3002/websites/123/posts/456/image/789/redownload.json").
-         to_return(:status => 200)
+      stub_request(:put, "http://localhost:3002/websites/123/posts/456/images/789/redownload.json").
+         to_return(:headers => {"Content-Type" => 'application/json'},
+                    :status => 200)
 
       ImageAPI.any_instance.expects(:redownload)
 

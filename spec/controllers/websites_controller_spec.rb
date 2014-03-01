@@ -12,7 +12,8 @@ describe WebsitesController do
 
     it "returns websites as json" do
       stub_request(:get, "http://localhost:3002/websites.json")
-      .to_return(:body => websites_json, 
+      .to_return(:headers => {"Content-Type" => 'application/json'},
+                  :body => websites_json, 
                   :status => 200)
 
       get 'index'

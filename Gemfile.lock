@@ -1,13 +1,4 @@
 GIT
-  remote: git://github.com/pwnall/mail
-  revision: d367c0827b10161d7cc42fd22237daa9a7cedafd
-  ref: d367c0827b10161d7cc42fd22237daa9a7cedafd
-  specs:
-    mail (2.5.4)
-      mime-types (>= 1.16)
-      treetop (~> 1.4.8)
-
-GIT
   remote: git://github.com/rusanu/blockuijs-rails.git
   revision: 5deb1d36a861327dd54002d559fcd0e6197a3c83
   specs:
@@ -79,8 +70,11 @@ GEM
       activesupport (>= 3.0.0)
     kgio (2.8.1)
     libv8 (3.16.14.3)
+    mail (2.5.4)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
     metaclass (0.0.2)
-    mime-types (2.1)
+    mime-types (1.25.1)
     minitest (4.7.5)
     mocha (1.0.0)
       metaclass (~> 0.0.1)
@@ -180,7 +174,6 @@ DEPENDENCIES
   httparty (= 0.13.0)
   jquery-rails (~> 3.1.0)
   kaminari (~> 0.15.1)
-  mail!
   mocha (~> 1.0.0)
   newrelic_rpm (~> 3.7.2.195)
   open_uri_redirections (~> 0.1.4)

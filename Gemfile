@@ -24,9 +24,6 @@ gem 'blockuijs-rails',  :git => 'git://github.com/rusanu/blockuijs-rails.git'
 gem 'turbolinks', '2.2.1'
 gem 'mail', git: 'git://github.com/pwnall/mail', :ref => 'd367c0827b10161d7cc42fd22237daa9a7cedafd' #Fixes mail dependency with mimetypes 1.x which conflicts with Mechanize dependency on mimetypes 2.x => https://github.com/mikel/mail/issues/641
 
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0.3'
-
 gem 'figaro', '~> 0.7.0'
 gem 'httparty', '0.13.0'
 gem 'kaminari', '~> 0.15.1'
@@ -43,7 +40,7 @@ group :test do
   gem "webmock", '~> 1.17.3'
 	gem "mocha", '~> 1.0.0'
   gem "rspec-rails", '~> 2.14.1'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', '~> 4.4.1'
 end
 
 # Use ActiveModel has_secure_password

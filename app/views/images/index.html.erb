@@ -25,7 +25,7 @@
           <%= link_to raw("<i class=\"icon-ok\"></i>"), website_post_image_path(@website_id, @post_id, image["id"]), :method => :put, :title => "Save", :class => "btn btn-small btn-success", remote: true %>
           <%= link_to raw("<i class=\"icon-remove\"></i>"), website_post_image_path(@website_id, @post_id, image["id"]), :method => :delete, :title => "Delete", :class => "btn btn-small btn-danger", remote: true %>
           <%= link_to raw("<i class=\"icon-refresh\"></i>"), redownload_website_post_image_path(@website_id, @post_id, image["id"]), :method => :put, :title => "Redownload", :class => "btn btn-small btn-primary", remote: true %>
-          <span><%= image["width"] %><%= image["height"] %></span>
+          <span><%= image["width"] %>x<%= image["height"] %></span>
         </p>
       </div>
         <span class="helper"><%= image_tag image_link(image) %></span>

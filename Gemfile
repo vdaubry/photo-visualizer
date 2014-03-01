@@ -36,6 +36,7 @@ group :doc do
 end
 
 group :test do
+  gem 'coveralls', '~> 0.7.0', require: false
   gem "webmock", '~> 1.17.3'
 	gem "mocha", '~> 1.0.0'
   gem "rspec-rails", '~> 2.14.1'

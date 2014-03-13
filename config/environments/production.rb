@@ -79,7 +79,7 @@ PhotoVisualizer::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   PHOTO_DOWNLOADER_URL = "http://localhost:3002"
-  NGINX_URL = "http://84.103.194.37"
+  NGINX_URL = "http://photo-visualizer.no-ip.biz/"
 
   SAFE_MODE = false
 end

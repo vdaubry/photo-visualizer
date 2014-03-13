@@ -35,7 +35,7 @@ PhotoVisualizer::Application.configure do
   config.active_support.deprecation = :stderr
 
   PHOTO_DOWNLOADER_URL = "http://localhost:3002"
-  NGINX_URL = "http://84.103.194.37"
+  NGINX_URL = "http://127.0.0.1"
 
   SAFE_MODE = false
 end

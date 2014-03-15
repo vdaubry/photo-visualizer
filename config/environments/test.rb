@@ -36,6 +36,7 @@ PhotoVisualizer::Application.configure do
 
   PHOTO_DOWNLOADER_URL = "http://localhost:3002"
   NGINX_URL = "http://127.0.0.1"
+  NGINX_THUMBNAILS_URL = "http://fake.no-ip.biz/images/production/to_sort/thumbnails/300/"
 
   SAFE_MODE = false
 end

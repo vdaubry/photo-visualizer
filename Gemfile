@@ -4,11 +4,11 @@ source 'https://rubygems.org'
 gem 'rails', '~> 4.0.3'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.1'
+gem 'sass-rails', '~> 4.0.2'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '~> 2.5.0'
 
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.1'
@@ -26,7 +26,7 @@ gem 'turbolinks', '2.2.1'
 gem 'figaro', '~> 0.7.0'
 gem 'httparty', '0.13.0'
 gem 'kaminari', '~> 0.15.1'
-gem 'newrelic_rpm', '~> 3.7.3.199'
+gem 'newrelic_rpm', '~> 3.7.3.204'
 gem 'open_uri_redirections', '~> 0.1.4'
 gem 'unicorn', '~> 4.8.2'
 

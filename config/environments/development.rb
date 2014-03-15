@@ -28,7 +28,7 @@ PhotoVisualizer::Application.configure do
   config.assets.debug = true
 
   PHOTO_DOWNLOADER_URL = "http://localhost:3002"
-  NGINX_URL = "http://photo-visualizer.no-ip.biz/"
+  NGINX_THUMBNAILS_URL = "http://photo-visualizer.no-ip.biz/images/development/to_sort/thumbnails/300/"
 
   SAFE_MODE = false
 end

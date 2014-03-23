@@ -22,8 +22,7 @@ class ImagesController < ApplicationController
 
   def update
     @image_id = params[:id]
-    status = ImageAPI.new(params[:website_id], params[:post_id], @image_id).put
-
+    ImageAPI.new(params[:website_id], params[:post_id], @image_id).put
   end
 
   def destroy

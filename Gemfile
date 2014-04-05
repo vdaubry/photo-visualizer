@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.0.0'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.0.4'
 
@@ -23,7 +25,6 @@ gem 'blockuijs-rails',  :git => 'git://github.com/rusanu/blockuijs-rails.git'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks', '2.2.1'
 
-gem 'figaro', '~> 0.7.0'
 gem 'httparty', '0.13.0'
 gem 'kaminari', '~> 0.15.1'
 gem 'newrelic_rpm', '~> 3.7.3.204'
@@ -43,14 +44,6 @@ group :test do
   gem 'factory_girl_rails', '~> 4.4.1'
 end
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
+group :production do
+  gem 'rails_12factor', '~> 0.0.2'
+end

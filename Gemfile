@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.0.4'
+gem 'rails', '~> 4.1.0'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.2'
+gem 'sass-rails', '~> 4.0.3'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
 
 # Use Uglifier as compressor for JavaScript assets
@@ -23,9 +23,9 @@ gem 'jquery-rails', '~> 3.1.0'
 gem 'blockuijs-rails',  :git => 'git://github.com/rusanu/blockuijs-rails.git'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks', '2.2.1'
+gem 'turbolinks', '2.2.2'
 
-gem 'httparty', '0.13.0'
+gem 'httparty', '0.13.1'
 gem 'kaminari', '~> 0.15.1'
 gem 'newrelic_rpm', '~> 3.7.3.204'
 gem 'open_uri_redirections', '~> 0.1.4'
@@ -40,7 +40,7 @@ group :test do
   gem 'coveralls', '~> 0.7.0', require: false
   gem "webmock", '~> 1.17.4'
 	gem "mocha", '~> 1.0.0'
-  gem "rspec-rails", '~> 2.14.1'
+  gem "rspec-rails", '~> 2.14.2'
   gem 'factory_girl_rails', '~> 4.4.1'
 end
 

@@ -78,7 +78,7 @@ PhotoVisualizer::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  PHOTO_DOWNLOADER_URL = "http://photo-visualizer.no-ip.biz:3002"
+  PHOTO_DOWNLOADER_URL = "http://92.222.1.55:3002"
   NGINX_THUMBNAILS_URL = "http://photo-visualizer.no-ip.biz/images/production/to_sort/thumbnails/300/"
 
   SAFE_MODE = false

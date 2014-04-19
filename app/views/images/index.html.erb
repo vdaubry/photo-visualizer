@@ -7,7 +7,8 @@
     <div class="well sidebar-nav">
       <ul class="nav nav-list">
         <li class="nav-header">Sidebar</li>
-        <li class="link"><%= link_to "Delete post", website_post_path(@website_id, @post_id), :method => :delete, :class => "btn-danger" %></li>
+        <li class="link"><%= link_to "Delete post", website_post_path(@website_id, @post_id), data: {:confirm => 'delete this post?'}, :method => :delete, :class => "btn-danger" %></li>
+        <li class="link"><%= link_to "Banish post", banish_website_post_path(@website_id, @post_id), data: {:confirm => 'banish this post?'}, :method => :put, :class => "btn-danger" %></li>
         <li class="link"><%= link_to "Images to sort", website_post_images_path(@website_id, @post_id, :status => "TO_SORT_STATUS") %></li>
         <li class="title"><span class="badge"><%=@to_sort_count%></span></li>
         <li class="link"><%= link_to "Images to keep", website_images_path(@website_id, :status => "TO_KEEP_STATUS", :post_id => @post_id) %></li>

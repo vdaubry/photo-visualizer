@@ -27,7 +27,7 @@ gem 'turbolinks', '2.2.2'
 
 gem 'httparty', '0.13.1'
 gem 'kaminari', '~> 0.15.1'
-gem 'newrelic_rpm', '~> 3.7.3.204'
+gem 'newrelic_rpm', '~> 3.8.0.218'
 gem 'open_uri_redirections', '~> 0.1.4'
 gem 'unicorn', '~> 4.8.2'
 

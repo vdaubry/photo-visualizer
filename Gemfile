@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.1.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.1.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -29,11 +29,15 @@ gem 'httparty', '0.13.1'
 gem 'kaminari', '~> 0.15.1'
 gem 'newrelic_rpm', '~> 3.8.0.218'
 gem 'open_uri_redirections', '~> 0.1.4'
-gem 'unicorn', '~> 4.8.2'
+gem 'unicorn', '~> 4.8.3'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
+end
+
+group :development do
+  gem "spring-commands-rspec"
 end
 
 group :test do

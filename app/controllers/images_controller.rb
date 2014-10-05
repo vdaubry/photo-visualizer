@@ -16,7 +16,7 @@ class ImagesController < ApplicationController
     if params[:status]
       total_count = params[:status].upcase=="TO_KEEP_STATUS" ? images.to_keep_count : images.to_delete_count
     end
-
+    
     @images = Kaminari.paginate_array(images.to_a, total_count: total_count).page(params[:page]).per(50)
   end
 

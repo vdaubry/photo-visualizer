@@ -24,3 +24,8 @@
 <div>
   <%= link_to "Transfert all images", "#", :id =>"transfert_button" %>
 </div>
+<div>
+  <% @zipfiles.each do |zip| %>
+    <%= link_to zip["key"], zip["url"] %>
+  <% end %>
+</div>

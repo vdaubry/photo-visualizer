@@ -21,7 +21,7 @@ angular.module('photoVisualizerApp')
   });
 
 angular.module('photoVisualizerApp')
-  .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage) {
+  .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage, Image) {
     $scope.userImages = [];
     $scope.shouldPaginate = true;
     $scope.maxSize=5;
@@ -40,4 +40,17 @@ angular.module('photoVisualizerApp')
     Post.get({website_id: $routeParams.website_id, id: $routeParams.id}, function(post) {
       $scope.post = post;
     });
+
+    $scope.saveImage = function(imageId) {
+      Image.update({id: imageId}, function() {
+        $scope.userImages.push(imageId);
+      });
+    };
+
+    $scope.deleteImage = function(imageId) {
+      Image.delete({id: imageId}, function() {
+        var index = $scope.userImages.indexOf(imageId);
+        $scope.userImages.splice(index, 1);
+      });
+    };
   });

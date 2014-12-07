@@ -22,6 +22,7 @@ angular.module('photoVisualizerApp')
 
 angular.module('photoVisualizerApp')
   .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage) {
+    $scope.userImages = [];
     $scope.shouldPaginate = true;
     $scope.maxSize=5;
     $scope.images = [];

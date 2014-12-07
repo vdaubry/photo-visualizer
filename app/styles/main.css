@@ -24,17 +24,16 @@ body {
   padding-bottom: 19px;
 }
 
-/* Website detail page */
-.thumbnail {
-
-}
-
 .nav-pills > li > a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* card image style */
+.panel.panel-default > div > button {
+  display: block; width: 100%;
+}
 
 /* Custom page footer */
 .footer {

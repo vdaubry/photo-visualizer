@@ -19,7 +19,9 @@ angular.module('photoVisualizerApp')
   });
 
 angular.module('photoVisualizerApp')
-  .controller('WebsiteDetailCtrl', function ($scope, $routeParams, Website, WebsiteImage) {
+  .controller('WebsiteDetailCtrl', function ($scope, $routeParams, Website, WebsiteImage, Image) {
+    $scope.userImages = [];
+
     Website.get({id: $routeParams.id}, function(website) {
       $scope.website = website;
     });
@@ -27,4 +29,17 @@ angular.module('photoVisualizerApp')
     WebsiteImage.query({website_id: $routeParams.id, id: "latest"}, function(images) {
       $scope.images = images;
     });
+
+    $scope.saveImage = function(imageId) {
+      Image.update({id: imageId}, function() {
+        $scope.userImages.push(imageId);
+      });
+    };
+
+    $scope.deleteImage = function(imageId) {
+      Image.delete({id: imageId}, function() {
+        var index = $scope.userImages.indexOf(imageId);
+        $scope.userImages.splice(index, 1);
+      });
+    };
   });

@@ -2,6 +2,8 @@
 
 angular.module('photoVisualizerApp')
   .controller('WebsiteListCtrl', function ($scope, Website) {
+    $scope.websites = [];
+
     $scope.$watch('page', function() {
       Website.query({page: $scope.page, per: $scope.per}, function(websites) {
         $scope.websites.push.apply($scope.websites, websites);
@@ -9,8 +11,7 @@ angular.module('photoVisualizerApp')
     });
 
     $scope.page = 1;
-    $scope.per = 2;
-    $scope.websites = [];
+    $scope.per = 50;
 
     $scope.loadMore = function() {
       $scope.page++

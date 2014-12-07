@@ -2,4 +2,11 @@
   <ul class="nav nav-pills nav-stacked">
     <li class="" ng-repeat="post in posts"><a href="#/websites/{{website.id}}/posts/{{post.id}}">{{post.name}}</a></li>
   </ul>
+  <br>
+  <div class="text-center">
+    <div class="btn-group btn-group-sm" role="group" aria-label="Large button group">
+      <button type="button" class="btn btn-default" ng-click='nextPage()' ng-hide="page==1">« Previous</button>
+      <button type="button" class="btn btn-default" ng-click='previousPage()'>Next »</button>
+    </div>
+  </div>
 </div>

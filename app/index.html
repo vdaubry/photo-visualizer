@@ -22,7 +22,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container">
+    <div class="container" ng-controller="ApplicationController">
       <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
           <!-- Brand and toggle get grouped for better mobile display -->
@@ -43,6 +43,7 @@
       <div class="footer">
 
       </div>
+      <div login-dialog ng-if="!isLoginPage"></div>
     </div>
 
 
@@ -83,9 +84,16 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/website.js"></script>
         <script src="scripts/controllers/post.js"></script>
+        <script src="scripts/controllers/loginController.js"></script>
+        <script src="scripts/controllers/modalLoginController.js"></script>
+        <script src="scripts/controllers/applicationController.js"></script>
         <script src="scripts/services/websiteService.js"></script>
         <script src="scripts/services/postService.js"></script>
         <script src="scripts/services/imageService.js"></script>
+        <script src="scripts/services/userService.js"></script>
+        <script src="scripts/services/authService.js"></script>
+        <script src="scripts/services/authInterceptor.js"></script>
+        <script src="scripts/constant.js"></script>
         <!-- endbuild -->
 </body>
 </html>

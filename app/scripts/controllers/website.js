@@ -19,8 +19,10 @@ angular.module('photoVisualizerApp')
   });
 
 angular.module('photoVisualizerApp')
-  .controller('WebsiteDetailCtrl', function ($scope, $routeParams, Website, WebsiteImage, Image) {
-    $scope.userImages = [];
+  .controller('WebsiteDetailCtrl', function ($scope, $routeParams, Website, WebsiteImage, Image, UserImage) {
+    UserImage.query({user_id:1, id: $routeParams.id}, function(images) {
+      $scope.userImages = images;
+    });
 
     Website.get({id: $routeParams.id}, function(website) {
       $scope.website = website;

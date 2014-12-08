@@ -1,0 +1,43 @@
+'use strict';
+
+var authService = angular.module('photoVisualizerApp');
+
+authService.factory('AuthService', function ($http) {
+  var authService = {};
+
+  authService.session = {};
+
+  authService.login = function (credentials) {
+    return $http
+      .post('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/sign_in', {"users": credentials})
+      .success(function (data, status, headers, config) {
+        console.log("data = "+JSON.stringify(data));
+        authService.createSession(data.users.token, data.users.id);
+        return data.users;
+      });
+  };
+
+  authService.isAuthenticated = function () {
+    return !!authService.session.userId;
+  };
+
+  authService.isAuthorized = function (authorizedRoles) {
+    if (!angular.isArray(authorizedRoles)) {
+      authorizedRoles = [authorizedRoles];
+    }
+    return (authService.isAuthenticated() &&
+      authorizedRoles.indexOf(Session.userRole) !== -1);
+  };
+
+  authService.createSession = function(userToken, userId) {
+    authService.session.userToken = userToken;
+    authService.session.userId = userId;
+  }
+
+  authService.destroySession = function() {
+    authService.session.userToken = null;
+    authService.session.userId = null;
+  }
+
+  return authService;
+})

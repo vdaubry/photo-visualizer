@@ -21,8 +21,11 @@ angular.module('photoVisualizerApp')
   });
 
 angular.module('photoVisualizerApp')
-  .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage, Image) {
-    $scope.userImages = [];
+  .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage, Image, UserImage) {
+    UserImage.query({user_id:1, id: $routeParams.id}, function(images) {
+      $scope.userImages = images;
+    });
+
     $scope.shouldPaginate = true;
     $scope.maxSize=5;
     $scope.images = [];

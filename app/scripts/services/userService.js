@@ -21,16 +21,15 @@ userService.factory('UserImage', function($resource) {
 });
 
 
-// userService.factory('UserSignin', function($resource) {
-//   var token;
-//   return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/signin', {},
-//     {
-//       signin: {
-//         method: 'POST',
-//         transformResponse: function(data, header) {
-//           token = JSON.parse(data).token
-//           return true;
-//         }
-//       }
-//     });
-// });
+userService.factory('UserWebsite', function($resource) {
+  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/websites/:id', {id: "@id"},
+    {
+      query: {
+        method: 'GET',
+        isArray: true,
+        transformResponse: function(data, header) {
+          return JSON.parse(data).websites;
+        }
+      }
+    });
+});

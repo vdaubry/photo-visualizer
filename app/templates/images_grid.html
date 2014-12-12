@@ -3,14 +3,15 @@
     <div class="col-lg-4 col-sm-6 col-xs-12" ng-repeat="image in images">
       <div class="panel panel-default">
         <a href="#">
-          <img src="{{image.thumbnail_url}}" class="img-responsive">
+          <div ng-style="{'background-image':'url({{image.thumbnail_url}})'}" class="background-img-responsive">
+            <div ng-if="userImages.indexOf(image.id) == -1"  style="display:none" showonhoverparent>
+              <button type="button" class="btn btn-success img-button" ng-click="saveImage(image.id)">save</button>
+            </div>
+            <div ng-if="userImages.indexOf(image.id) > -1">
+              <button type="button" class="btn btn-danger img-button" ng-click="deleteImage(image.id)">delete</button>
+            </div>
+          </div>
         </a>
-        <div ng-if="userImages.indexOf(image.id) == -1">
-          <button type="button" class="btn btn-success" ng-click="saveImage(image.id)">save</button>
-        </div>
-        <div ng-if="userImages.indexOf(image.id) > -1">
-          <button type="button" class="btn btn-danger" ng-click="deleteImage(image.id)">delete</button>
-        </div>
       </div>
     </div>
   </div>

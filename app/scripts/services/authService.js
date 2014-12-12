@@ -4,7 +4,6 @@ var authService = angular.module('photoVisualizerApp');
 
 authService.factory('AuthService', function ($http) {
   var authService = {};
-
   authService.session = {};
 
   authService.login = function (credentials) {
@@ -19,14 +18,6 @@ authService.factory('AuthService', function ($http) {
 
   authService.isAuthenticated = function () {
     return !!authService.session.userId;
-  };
-
-  authService.isAuthorized = function (authorizedRoles) {
-    if (!angular.isArray(authorizedRoles)) {
-      authorizedRoles = [authorizedRoles];
-    }
-    return (authService.isAuthenticated() &&
-      authorizedRoles.indexOf(Session.userRole) !== -1);
   };
 
   authService.createSession = function(userToken, userId) {

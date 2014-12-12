@@ -31,8 +31,16 @@ body {
 }
 
 /* card image style */
-.panel.panel-default > div > button {
-  display: block; width: 100%;
+.img-button {
+  position: absolute;
+  bottom: 21px;
+  width: 224px;
+}
+
+.background-img-responsive {
+  background-size: 100% auto;
+  height: 224px;
+  background-repeat: no-repeat;
 }
 
 /* Custom page footer */

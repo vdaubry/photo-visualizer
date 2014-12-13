@@ -24,6 +24,10 @@ angular
         templateUrl: 'views/websiteList.html',
         controller: 'WebsiteListCtrl'
       })
+      .when('/websites/manage', {
+        templateUrl: 'views/websiteManagment.html',
+        controller: 'WebsiteManagmentCtrl'
+      })
       .when('/websites/:id', {
         templateUrl: 'views/websiteDetail.html',
         controller: 'WebsiteDetailCtrl'

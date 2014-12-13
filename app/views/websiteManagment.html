@@ -1,0 +1,23 @@
+<h3>Add or remove websites</h3>
+<br>
+<div class="row">
+  <table class="table table-striped table-hover">
+    <th></th>
+    <th>Name</th>
+    <th>URL</th>
+    <th>Images</th>
+    <th>Latest Image</th>
+    <tr ng-repeat="website in websites">
+      <td>
+        <button ng-show="hasWebsite(website)" class="btn btn-danger" type="button" ng-click="unsubscribe(website.id)">Unsubscribe</button>
+        <button ng-show="!hasWebsite(website)" class="btn btn-success" type="button" ng-click="subscribe(website.id)">Subscribe</button>
+      </td>
+      <td><a href="#/websites/{{website.id}}">{{website.name}}</a></td>
+      <td>{{website.url}}</td>
+      <td>{{website.images_count}}</td>
+      <td>{{website.last_scrapping_date}}</td>
+    </tr>
+  </table>
+</div>
+<button type="button" class="btn btn-default" ng-click='loadMore()'>More</button>
+<a href="#/" class="btn btn-primary pull-right">Next</a>

@@ -6,11 +6,11 @@
     <th>URL</th>
     <th>Images</th>
     <th>Latest Image</th>
-    <tr ng-repeat="website in websites">
-      <td><a href="#/websites/{{website.id}}">{{website.name}}</a></td>
-      <td>{{website.url}}</td>
-      <td>{{website.images_count}}</td>
-      <td>{{website.last_scrapping_date}}</td>
+    <tr ng-repeat="subscription in subscriptions">
+      <td><a href="#/websites/{{website.id}}">{{subscription.linked.websites[0].name}}</a></td>
+      <td>{{subscription.linked.websites[0].url}}</td>
+      <td>{{subscription.linked.websites[0].images_count}}</td>
+      <td>{{subscription.linked.websites[0].last_scrapping_date}}</td>
     </tr>
   </table>
 </div>

@@ -10,7 +10,6 @@ authService.factory('AuthService', function ($http) {
     return $http
       .post('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/sign_in', {"users": credentials})
       .success(function (data, status, headers, config) {
-        console.log("data = "+JSON.stringify(data));
         authService.createSession(data.users.token, data.users.id);
         return data.users;
       });

@@ -28,10 +28,6 @@ angular
         templateUrl: 'views/websiteManagment.html',
         controller: 'WebsiteManagmentCtrl'
       })
-      .when('/websites/:id', {
-        templateUrl: 'views/websiteDetail.html',
-        controller: 'WebsiteDetailCtrl'
-      })
       .when('/websites/:website_id/posts/:id', {
         templateUrl: 'views/postDetail.html',
         controller: 'PostDetailCtrl'

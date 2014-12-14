@@ -9,10 +9,10 @@
     <th>Latest Image</th>
     <tr ng-repeat="website in websites">
       <td>
-        <button ng-show="hasWebsite(website)" class="btn btn-danger" type="button" ng-click="unsubscribe(website.id)">Unsubscribe</button>
-        <button ng-show="!hasWebsite(website)" class="btn btn-success" type="button" ng-click="subscribe(website.id)">Subscribe</button>
+        <button ng-show="hasWebsite(website)" class="btn btn-danger" type="button" ng-click="unsubscribe(website)">Unsubscribe</button>
+        <button ng-show="!hasWebsite(website)" class="btn btn-success" type="button" ng-click="subscribe(website)">Subscribe</button>
       </td>
-      <td><a href="#/websites/{{website.id}}">{{website.name}}</a></td>
+      <td><a href="#/websites/{{website.id}}/posts/{{website.linked.posts[0].id}}">{{website.name}}</a></td>
       <td>{{website.url}}</td>
       <td>{{website.images_count}}</td>
       <td>{{website.last_scrapping_date}}</td>
@@ -20,4 +20,3 @@
   </table>
 </div>
 <button type="button" class="btn btn-default" ng-click='loadMore()'>More</button>
-<a href="#/" class="btn btn-primary pull-right">Next</a>

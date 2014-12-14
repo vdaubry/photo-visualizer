@@ -23,8 +23,17 @@ angular.module('photoVisualizerApp')
 angular.module('photoVisualizerApp')
   .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage, Image, UserImage) {
     UserImage.query({user_id:1, id: $routeParams.id}, function(images) {
+      console.log("images = "+JSON.stringify(images));
       $scope.userImages = images;
     });
+
+    $scope.hasSavedImage = function(image) {
+      var ids = []
+      for(var index in $scope.userImages) {
+        ids.push($scope.userImages[index].id)
+      }
+      return ids.indexOf(image.id) > -1;
+    }
 
     $scope.shouldPaginate = true;
     $scope.maxSize=5;

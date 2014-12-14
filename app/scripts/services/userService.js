@@ -2,8 +2,8 @@
 
 var userService = angular.module('photoVisualizerApp');
 
-userService.factory('UserSubscriptionImage', function($resource) {
-  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/:user_id/subscription/:id/images', {user_id: "@user_id", id: "@id"},
+userService.factory('UserImage', function($resource) {
+  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/:user_id/websites/:id/images', {user_id: "@user_id", id: "@id"},
     {
       query: {
         method: 'GET',
@@ -17,23 +17,15 @@ userService.factory('UserSubscriptionImage', function($resource) {
 });
 
 
-userService.factory('UserSubscription', function($resource) {
-  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/:user_id/subscriptions/:id', {user_id: "@user_id", id: "@id"},
+userService.factory('UserWebsite', function($resource) {
+  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/:user_id/websites/:id', {user_id: "@user_id", id: "@id"},
     {
-      save: {
-        method:'POST',
-        isArray: false,
-        transformResponse: function(data, header) {
-          var subscription = JSON.parse(data).subscriptions;
-          return subscription;
-        }
-      },
       query: {
         method: 'GET',
         isArray: true,
         transformResponse: function(data, header) {
-          var subscriptions = JSON.parse(data).subscriptions;
-          return subscriptions;
+          var websites = JSON.parse(data).websites;
+          return websites;
         }
       }
     });

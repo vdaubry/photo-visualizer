@@ -2,12 +2,12 @@
   <div class="row">
     <div class="col-lg-4 col-sm-6 col-xs-12" ng-repeat="image in images">
       <div class="panel panel-default">
-        <a href="#">
+        <a href="">
           <div ng-style="{'background-image':'url({{image.thumbnail_url}})'}" class="background-img-responsive">
-            <div ng-if="userImages.indexOf(image.id) == -1"  style="display:none" showonhoverparent>
+            <div ng-if="!hasSavedImage(image)"  style="display:none" showonhoverparent>
               <button type="button" class="btn btn-success img-button" ng-click="saveImage(image.id)">save</button>
             </div>
-            <div ng-if="userImages.indexOf(image.id) > -1">
+            <div ng-if="hasSavedImage(image)">
               <button type="button" class="btn btn-danger img-button" ng-click="deleteImage(image.id)">delete</button>
             </div>
           </div>

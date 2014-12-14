@@ -1,9 +1,10 @@
 angular.module('photoVisualizerApp')
   .controller('PostListCtrl', function ($scope, $routeParams, Post) {
     $scope.posts = [];
+    $scope.website = {id: $routeParams.website_id};
 
     $scope.$watch('page', function() {
-      Post.query({website_id: $routeParams.id, page: $scope.page, per: $scope.per}, function(posts) {
+      Post.query({website_id: $routeParams.website_id, page: $scope.page, per: $scope.per}, function(posts) {
         $scope.posts = posts;
       });
     });
@@ -23,7 +24,6 @@ angular.module('photoVisualizerApp')
 angular.module('photoVisualizerApp')
   .controller('PostDetailCtrl', function ($scope, $routeParams, Post, PostImage, Image, UserImage) {
     UserImage.query({user_id:1, id: $routeParams.id}, function(images) {
-      console.log("images = "+JSON.stringify(images));
       $scope.userImages = images;
     });
 

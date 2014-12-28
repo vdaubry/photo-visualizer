@@ -4,7 +4,6 @@ angular.module('photoVisualizerApp')
   $scope.isLoginPage = false;
 
   $scope.$on(AUTH_EVENTS.notAuthenticated, function() {
-    console.log("bar");
     var modalInstance = $modal.open({
       templateUrl: 'views/modalLogin.html',
       controller: 'ModalInstanceCtrl'

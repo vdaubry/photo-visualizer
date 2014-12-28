@@ -2,8 +2,8 @@
 
 var websiteService = angular.module('photoVisualizerApp');
 
-websiteService.factory('Website', function($resource) {
-  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/websites/:id', {},
+websiteService.factory('Website', function($resource, ENV, AuthService) {
+  return $resource('http://'+ENV.url+'/websites/:id.json', {authentication_token: AuthService.getSession().userToken},
     {
       get: {
         method: 'GET',

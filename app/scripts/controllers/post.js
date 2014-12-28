@@ -51,6 +51,7 @@ angular.module('photoVisualizerApp')
 
     Post.get({website_id: $routeParams.website_id, id: $routeParams.id}, function(post) {
       $scope.post = post;
+      $scope.page = post.current_page;
     });
 
     $scope.saveImage = function(imageId) {

@@ -2,13 +2,12 @@
 
 var authService = angular.module('photoVisualizerApp');
 
-authService.factory('AuthService', function ($http) {
+authService.factory('AuthService', function ($http, ENV) {
   var authService = {};
-  authService.session = {};
-
+  
   authService.login = function (credentials) {
     return $http
-      .post('http://private-f50cf-photovisualizer.apiary-mock.com/v1/users/sign_in', {"users": credentials})
+      .post('http://'+ENV.url+'/users/sign_in.json', {"users": credentials})
       .success(function (data, status, headers, config) {
         authService.createSession(data.users.token, data.users.id);
         return data.users;
@@ -16,17 +15,22 @@ authService.factory('AuthService', function ($http) {
   };
 
   authService.isAuthenticated = function () {
-    return !!authService.session.userId;
+    return !!authService.getSession().userId;
   };
 
   authService.createSession = function(userToken, userId) {
-    authService.session.userToken = userToken;
-    authService.session.userId = userId;
+    localStorage.setItem("userToken", userToken);
+    localStorage.setItem("userId", userId);
+  }
+  
+  authService.getSession = function() {
+      return {userToken: localStorage.getItem("userToken"),
+              userId: localStorage.getItem("userId") }
   }
 
   authService.destroySession = function() {
-    authService.session.userToken = null;
-    authService.session.userId = null;
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userId");
   }
 
   return authService;

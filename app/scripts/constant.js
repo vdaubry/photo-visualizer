@@ -8,4 +8,8 @@ angular.module('photoVisualizerApp')
   sessionTimeout: 'auth-session-timeout',
   notAuthenticated: 'auth-not-authenticated',
   notAuthorized: 'auth-not-authorized'
+})
+.constant('ENV', {
+  url: 'localhost:3002'
+  //url: '92.222.1.55:3002'
 });

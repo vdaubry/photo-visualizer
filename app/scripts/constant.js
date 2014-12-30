@@ -10,6 +10,7 @@ angular.module('photoVisualizerApp')
   notAuthorized: 'auth-not-authorized'
 })
 .constant('ENV', {
-  url: 'localhost:3002'
+  //url: 'localhost:3002'
   //url: '92.222.1.55:3002'
+  url: 'private-f50cf-photovisualizer.apiary-mock.com/v1'
 });

@@ -2,8 +2,8 @@
 
 var postService = angular.module('photoVisualizerApp');
 
-postService.factory('Post', function($resource) {
-  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/websites/:website_id/posts/:id', {website_id: "@website_id", id: "@id"},
+postService.factory('Post', function($resource, ENV) {
+  return $resource('http://'+ENV.url+'/websites/:website_id/posts/:id.json', {website_id: "@website_id", id: "@id"},
     {
       get: {
         method: 'GET',
@@ -22,8 +22,8 @@ postService.factory('Post', function($resource) {
     });
 });
 
-websiteService.factory('PostImage', function($resource) {
-  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/posts/:post_id/images/:id', {post_id: "@post_id", id: "@id"},
+websiteService.factory('PostImage', function($resource, ENV) {
+  return $resource('http://'+ENV.url+'/posts/:post_id/images/:id.json', {post_id: "@post_id", id: "@id"},
     {
       query: {
         method: 'GET',

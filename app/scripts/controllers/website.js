@@ -2,7 +2,7 @@
 
 angular.module('photoVisualizerApp')
   .controller('WebsiteListCtrl', function ($rootScope, $scope, AUTH_EVENTS, Website, UserWebsite, AuthService) {
-    UserWebsite.query({user_id: 1234, page: 1, per: 50}, function(websites) {
+    UserWebsite.query({user_id: AuthService.getSession().userId, page: 1, per: 50}, function(websites) {
       $scope.websites = websites;
     });
   });
@@ -11,10 +11,6 @@ angular.module('photoVisualizerApp')
   .controller('WebsiteManagmentCtrl', function ($rootScope, $scope, AUTH_EVENTS, Website, UserWebsite, AuthService) {
     $scope.websites = [];
 
-    // if(JSON.stringify(AuthService.session)=='{}') {
-    //   $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-    // }
-    // else {
     $scope.hasWebsite = function(website) {
       var ids = []
       for(var index in $scope.userWebsites) {
@@ -23,10 +19,9 @@ angular.module('photoVisualizerApp')
       return ids.indexOf(website.id) > -1
     }
 
-    UserWebsite.query({user_id: 1234, page: 1, per: 50}, function(websites) {
+    UserWebsite.query({user_id: AuthService.getSession().userId, page: 1, per: 50}, function(websites) {
       $scope.userWebsites = websites;
     });
-    //}
 
     $scope.$watch('page', function() {
       Website.query({page: $scope.page, per: $scope.per}, function(websites) {
@@ -42,13 +37,13 @@ angular.module('photoVisualizerApp')
     };
 
     $scope.subscribe = function(website) {
-      UserWebsite.save({user_id: 1234, website_id: website.id}, function() {
+      UserWebsite.save({user_id: AuthService.getSession().userId, website_id: website.id}, function() {
         $scope.userWebsites.push(website);
       });
     };
 
     $scope.unsubscribe = function(website) {
-      UserWebsite.remove({user_id: 1234, id: website.id}, function() {
+      UserWebsite.remove({user_id: AuthService.getSession().userId, id: website.id}, function() {
         for(var index in $scope.userWebsites) {
           if($scope.userWebsites[index].id == website.id) {
             $scope.userWebsites.splice(index, 1);

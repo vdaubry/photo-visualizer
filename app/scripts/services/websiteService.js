@@ -24,7 +24,7 @@ websiteService.factory('Website', function($resource, ENV, AuthService) {
 
 
 websiteService.factory('WebsiteImage', function($resource) {
-  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/websites/:website_id/images/:id', {website_id: "@website_id", id: "@id"},
+  return $resource('http://private-f50cf-photovisualizer.apiary-mock.com/v1/websites/:website_id/images/:id.json', {website_id: "@website_id", id: "@id"},
     {
       query: {
         method: 'GET',

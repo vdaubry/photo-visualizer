@@ -2,6 +2,10 @@
 
 angular.module('photoVisualizerApp')
   .controller('WebsiteListCtrl', function ($rootScope, $scope, AUTH_EVENTS, Website, UserWebsite, AuthService) {
+    if(!AuthService.getSession().userId) {
+      $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+    };
+    
     UserWebsite.query({user_id: AuthService.getSession().userId, page: 1, per: 50}, function(websites) {
       $scope.websites = websites;
     });

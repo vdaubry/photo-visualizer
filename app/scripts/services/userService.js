@@ -33,7 +33,7 @@ userService.factory('UserWebsite', function($resource, ENV, AuthService) {
 
 
 userService.factory('UserPost', function($resource, ENV, AuthService) {
-  return $resource('http://'+ENV.url+'/users/:user_id/posts/:id.json', {user_id: "@user_id", id: "@id", authentication_token: AuthService.getSession().userToken},
+  return $resource('http://'+ENV.url+'/users/:user_id/websites/:website_id/posts/:id.json', {user_id: "@user_id", website_id: "@website_id",id: "@id", authentication_token: AuthService.getSession().userToken},
     {
       get: {
         method: 'GET',

@@ -39,7 +39,7 @@ angular.module('photoVisualizerApp')
     $scope.page = 1;
     $scope.per = 50;
     
-    $scope.post = UserPost.get({user_id: AuthService.getSession().userId, id: $routeParams.id});
+    $scope.post = UserPost.get({user_id: AuthService.getSession().userId, website_id: $routeParams.website_id, id: $routeParams.id});
     $scope.post.$promise.then(function(post) {
       
       $scope.post = post;

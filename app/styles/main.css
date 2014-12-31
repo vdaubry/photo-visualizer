@@ -24,15 +24,20 @@ body {
   padding-bottom: 19px;
 }
 
-.nav-pills > li > a {
+.post {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #428bca;
 }
 
-.post {
-  border: 1px solid #e1e1e8;
-  border-radius: 4px;
+.post a {
+  text-decoration: blink;
+  padding-top: 10px;
+}
+
+.post .row {
+  padding-top: 4px;
 }
 
 .post-info {

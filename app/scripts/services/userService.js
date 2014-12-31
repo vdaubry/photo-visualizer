@@ -2,19 +2,19 @@
 
 var userService = angular.module('photoVisualizerApp');
 
-userService.factory('UserImage', function($resource, ENV, AuthService) {
-  return $resource('http://'+ENV.url+'/users/:user_id/posts/:id/images.json', {user_id: "@user_id", id: "@id", authentication_token: AuthService.getSession().userToken},
-    {
-      query: {
-        method: 'GET',
-        isArray: true,
-        transformResponse: function(data, header) {
-          var images = JSON.parse(data).images
-          return images;
-        }
-      }
-    });
-});
+// userService.factory('UserImage', function($resource, ENV, AuthService) {
+//   return $resource('http://'+ENV.url+'/users/:user_id/posts/:id/images.json', {user_id: "@user_id", id: "@id", authentication_token: AuthService.getSession().userToken},
+//     {
+//       query: {
+//         method: 'GET',
+//         isArray: true,
+//         transformResponse: function(data, header) {
+//           var images = JSON.parse(data).images
+//           return images;
+//         }
+//       }
+//     });
+// });
 
 
 userService.factory('UserWebsite', function($resource, ENV, AuthService) {
@@ -42,6 +42,22 @@ userService.factory('UserPost', function($resource, ENV, AuthService) {
           var posts = JSON.parse(data).posts;
           return posts;
         }
-      }
+      },
+      update: { method:'PUT' }
+    });
+});
+
+userService.factory('UserImage', function($resource, ENV, AuthService) {
+  return $resource('http://'+ENV.url+'/users/:user_id/posts/:post_id/images/:id.json', {user_id: "@user_id", post_id: "@post_id",id: "@id", authentication_token: AuthService.getSession().userToken},
+    {
+      query: {
+        method: 'GET',
+        isArray: true,
+        transformResponse: function(data, header) {
+          var images = JSON.parse(data).images
+          return images;
+        }
+      },
+      update: { method:'PUT' }
     });
 });

@@ -30,6 +30,16 @@ body {
   text-overflow: ellipsis;
 }
 
+.post {
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+}
+
+.post-info {
+  margin-left: 15px;
+  margin-bottom: 15px;
+}
+
 /* card image style */
 .img-button {
   position: absolute;

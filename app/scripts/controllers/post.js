@@ -22,7 +22,7 @@ angular.module('photoVisualizerApp')
   });
 
 angular.module('photoVisualizerApp')
-  .controller('PostDetailCtrl', function ($scope, $routeParams, UserPost, PostImage, Image, UserImage, AuthService) {
+  .controller('PostDetailCtrl', function ($scope, $routeParams, UserPost, PostImage, UserImage, UserImage, AuthService) {
     
     $scope.hasSavedImage = function(image) {
       var ids = []
@@ -40,12 +40,11 @@ angular.module('photoVisualizerApp')
     $scope.per = 50;
     
     $scope.post = UserPost.get({user_id: AuthService.getSession().userId, website_id: $routeParams.website_id, id: $routeParams.id});
-    $scope.post.$promise.then(function(post) {
-      
+    $scope.post.$promise.then(function(post) { 
       $scope.post = post;
       $scope.page = post.current_page;
       
-      UserImage.query({user_id: AuthService.getSession().userId, id: post.id}, function(images) {
+      UserImage.query({user_id: AuthService.getSession().userId, post_id: post.id, id: null}, function(images) {
         $scope.userImages = images;
       });
       
@@ -53,21 +52,23 @@ angular.module('photoVisualizerApp')
         PostImage.query({post_id: post.id, page: newPage, per: $scope.per}, function(images) {
           $scope.images = images;
         });
+        
+        UserPost.update({user_id: AuthService.getSession().userId, website_id: $routeParams.website_id, id: post.id, current_page: newPage})
       };
       
       $scope.pageChanged($scope.page);
+      
+      $scope.saveImage = function(imageId) {
+        UserImage.update({user_id: AuthService.getSession().userId, post_id: post.id, id: imageId}, function() {
+          $scope.userImages.push(imageId);
+        });
+      };
+
+      $scope.deleteImage = function(imageId) {
+        Image.delete({id: imageId}, function() {
+          var index = $scope.userImages.indexOf(imageId);
+          $scope.userImages.splice(index, 1);
+        });
+      };
     });
-
-    $scope.saveImage = function(imageId) {
-      Image.update({id: imageId}, function() {
-        $scope.userImages.push(imageId);
-      });
-    };
-
-    $scope.deleteImage = function(imageId) {
-      Image.delete({id: imageId}, function() {
-        var index = $scope.userImages.indexOf(imageId);
-        $scope.userImages.splice(index, 1);
-      });
-    };
   });

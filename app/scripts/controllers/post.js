@@ -46,29 +46,29 @@ angular.module('photoVisualizerApp')
       
       UserImage.query({user_id: AuthService.getSession().userId, post_id: post.id, id: null}, function(images) {
         $scope.userImages = images;
-      });
-      
-      $scope.pageChanged = function(newPage) {
-        PostImage.query({post_id: post.id, page: newPage, per: $scope.per}, function(images) {
-          $scope.images = images;
-        });
         
-        UserPost.update({user_id: AuthService.getSession().userId, website_id: $routeParams.website_id, id: post.id, current_page: newPage})
-      };
+        $scope.pageChanged = function(newPage) {
+          PostImage.query({post_id: post.id, page: newPage, per: $scope.per}, function(images) {
+            $scope.images = images;
+          });
+          
+          UserPost.update({user_id: AuthService.getSession().userId, website_id: $routeParams.website_id, id: post.id, current_page: newPage, images_seen: $scope.userImages.length})
+        };
+        
+        $scope.pageChanged($scope.page);
       
-      $scope.pageChanged($scope.page);
-      
-      $scope.saveImage = function(imageId) {
-        UserImage.update({user_id: AuthService.getSession().userId, post_id: post.id, id: imageId}, function() {
-          $scope.userImages.push(imageId);
-        });
-      };
+        $scope.saveImage = function(imageId) {
+          UserImage.update({user_id: AuthService.getSession().userId, post_id: post.id, id: imageId}, function() {
+            $scope.userImages.push(imageId);
+          });
+        };
 
-      $scope.deleteImage = function(imageId) {
-        Image.delete({id: imageId}, function() {
-          var index = $scope.userImages.indexOf(imageId);
-          $scope.userImages.splice(index, 1);
-        });
-      };
+        $scope.deleteImage = function(imageId) {
+          Image.delete({id: imageId}, function() {
+            var index = $scope.userImages.indexOf(imageId);
+            $scope.userImages.splice(index, 1);
+          });
+        };
+      });
     });
   });

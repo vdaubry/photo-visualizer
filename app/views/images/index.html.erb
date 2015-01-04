@@ -29,8 +29,8 @@
           <span><%= image["width"] %>x<%= image["height"] %></span>
         </p>
       </div>
-        <!-- <span class="helper"><%= image_set_tag(image["thumbnail_url"], {'1X' => image["thumbnail1X_url"], '2X' => image["thumbnail2X_url"]}) %></span> -->
-        <span class="helper"><%= image_tag image["thumbnail_url"] %></span>
+        <!-- <span class="helper"><%= image_set_tag(image["thumbnail1X_url"], {'1X' => image["thumbnail1X_url"], '2X' => image["thumbnail2X_url"]}) %></span> -->
+        <span class="helper"><%= image_tag image["thumbnail1X_url"] %></span>
       </div>
     <% end %>
   </div>

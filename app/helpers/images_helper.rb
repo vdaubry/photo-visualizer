@@ -1,9 +1,6 @@
 module ImagesHelper
-  def image_link(image)
-    if SAFE_MODE 
-      NGINX_THUMBNAILS_URL+"calinours.jpg"
-    else
-      NGINX_THUMBNAILS_URL+image["key"]
-    end
+  def image_set_tag(source, srcset = {}, options = {})
+    srcset_str = "#{srcset['1X']} 1x, #{srcset['2X']} 2x"
+    image_tag(source, options.merge(srcset: srcset_str))
   end
 end

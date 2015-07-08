@@ -1,1 +1,2 @@
---color --tag '~speed:slow'
+--color
+--require spec_helper

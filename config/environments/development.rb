@@ -1,4 +1,4 @@
-PhotoVisualizer::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -19,16 +19,20 @@ PhotoVisualizer::Application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.assets.cache_store = :null_store  # Disables the Asset cache
-  config.sass.cache = false  # Disable the SASS compiler cache
-
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
 
-  PHOTO_DOWNLOADER_URL = "http://localhost:3002"
-  NGINX_THUMBNAILS_URL = "http://92.222.1.55/images/development/to_sort/thumbnails/300/"
+  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
+  # yet still be able to expire them through the digest params.
+  config.assets.digest = true
 
-  SAFE_MODE = false
+  # Adds additional error checking when serving assets at runtime.
+  # Checks for improperly declared sprockets dependencies.
+  # Raises helpful error messages.
+  config.assets.raise_runtime_errors = true
+
+  # Raises error for missing translations
+  # config.action_view.raise_on_missing_translations = true
 end

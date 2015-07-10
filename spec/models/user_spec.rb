@@ -5,7 +5,7 @@ describe User do
   let(:user) { FactoryGirl.create(:user) }
   
   describe "create" do
-    it { FactoryGirl.build(:user).save!.should == true }
+    it { FactoryGirl.build(:user).save.should == true }
     
     it "encrypts password" do
       user = FactoryGirl.create(:user, password: "foo")
@@ -33,6 +33,17 @@ describe User do
       user.email = "new@email.com"
       user.save
       user.reload.password_digest.should == old_encrypted_password
+    end
+  end
+
+  describe "relations" do
+    it "has websites" do
+      user = FactoryGirl.create(:user)
+      user.websites = FactoryGirl.create_list(:website, 2)
+      user.save
+
+      user.websites.count.should == 2
+      User.first.websites.count.should == 2
     end
   end
 end

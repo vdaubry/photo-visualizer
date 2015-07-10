@@ -15,6 +15,7 @@ gem 'sentry-raven',               '~> 0.13.3'
 gem 'newrelic_rpm',               '~> 3.12.1.298'
 gem 'mongoid',                    '~> 4.0.2'
 gem 'aws-sdk',                    '~> 2.1.3'
+gem 'bcrypt',                     '~> 3.1.10'
 
 group :development do
   gem 'quiet_assets'

@@ -5,7 +5,6 @@ RSpec.configure do |config|
   end
 
   config.mock_with :mocha
-
   config.order = :random
 
   config.after(:each) do

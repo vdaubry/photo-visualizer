@@ -1,0 +1,21 @@
+<div class="page-header">
+  <h1>Websites</h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th> Name </th>
+      <th> URL </th>
+      <th> Number of images </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @websites.each do |website| %>
+      <tr>
+        <td> <%= website.name %></td>
+        <td><%= website.url %></td>
+        <td><%= website.images.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

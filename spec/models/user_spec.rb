@@ -45,5 +45,15 @@ describe User do
       user.websites.count.should == 2
       User.first.websites.count.should == 2
     end
+
+    it "adds websites" do
+      user = FactoryGirl.create(:user)
+      website = user.websites.create(name: "foo", url: "http://foo.bar")
+      user.save!
+
+      user.websites.count.should == 1
+      Website.count.should == 1
+      User.first.websites.should == [website]
+    end
   end
 end

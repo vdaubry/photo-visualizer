@@ -1,0 +1,14 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        <li><%= link_to "Home", root_path %></li>
+      </ul>
+      <% if current_user.try(:id) %>
+        <ul class="nav navbar-nav navbar-right">
+          <li><%= link_to "Logout", session_path(current_user), :method => :delete %></li>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</nav>

@@ -16,7 +16,11 @@ gem 'newrelic_rpm',               '~> 3.12.1.298'
 gem 'mongoid',                    '~> 4.0.2'
 gem 'aws-sdk',                    '~> 2.1.3'
 
-group :development, :test do  
+group :development do
+  gem 'quiet_assets'
+end
+
+group :development, :test do
   gem 'byebug',                   '~> 5.0.0'
   gem 'spring',                   '~> 1.3.6'
   gem 'rspec-rails',              '~> 3.3.2'

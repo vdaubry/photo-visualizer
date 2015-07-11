@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :post do
-    name "string"
-    url "string" 
+    sequence(:name) {|i| "string#{i}"}
+    sequence(:url) {|i| "http://string#{i}.com" }
     website
   end
 end

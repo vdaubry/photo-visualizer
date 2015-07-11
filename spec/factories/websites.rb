@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :website do
-    name "string"
-    url "string" 
+    sequence(:name) {|i| "string#{i}"}
+    sequence(:url) {|i| "http://string#{i}.com" }
   end
 end

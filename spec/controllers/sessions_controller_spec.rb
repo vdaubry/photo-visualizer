@@ -12,9 +12,9 @@ describe SessionsController do
         session[:user_id].should == User.last.id.to_s
       end
       
-      it "redirects to projets list" do
+      it "redirects to website list" do
         post :create, email: user.email, password: "foo"
-        response.should redirect_to root_path
+        response.should redirect_to user_websites_path
       end
     end
     

@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Post do
 
   let(:post) { FactoryGirl.create(:post) }
+  let(:website) { FactoryGirl.create(:website) }
   
   describe "create" do
     it { FactoryGirl.build(:post).save.should == true }
@@ -12,6 +13,21 @@ describe Post do
     it { FactoryGirl.build(:post, name: nil).save.should == false }
     it { FactoryGirl.build(:post, url: nil).save.should == false }
     it { FactoryGirl.build(:post, website: nil).save.should == false }
+
+    it "has unique name for the same website" do
+      FactoryGirl.build(:post, name: "foo", website: website).save.should == true
+      FactoryGirl.build(:post, name: "foo", website: website).save.should == false
+    end
+
+    it "has not unique name for the different website" do
+      FactoryGirl.build(:post, name: "foo", website: website).save.should == true
+      FactoryGirl.build(:post, name: "foo", website: FactoryGirl.create(:website)).save.should == true
+    end
+
+    it "has unique url even for the different website" do
+      FactoryGirl.build(:post, url: "http://foo.bar").save.should == true
+      FactoryGirl.build(:post, url: "http://foo.bar").save.should == false
+    end
   end
 
   describe "relations" do

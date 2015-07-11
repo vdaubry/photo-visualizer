@@ -38,7 +38,6 @@ describe User do
 
   describe "relations" do
     it "has websites" do
-      user = FactoryGirl.create(:user)
       user.websites = FactoryGirl.create_list(:website, 2)
       user.save
 
@@ -46,8 +45,7 @@ describe User do
       User.first.websites.count.should == 2
     end
 
-    it "adds websites" do
-      user = FactoryGirl.create(:user)
+    it "adds new websites" do
       website = user.websites.create(name: "foo", url: "http://foo.bar")
       user.save!
 
@@ -55,5 +53,34 @@ describe User do
       Website.count.should == 1
       User.first.websites.should == [website]
     end
+
+    it "adds existing website" do
+      website = FactoryGirl.create(:website)
+      user.websites.push(website)
+
+      user.websites.count.should == 1
+      Website.count.should == 1
+      User.first.websites.should == [website]
+    end
+
+    it "removes existing website" do
+      website = user.websites.create(name: "foo", url: "http://foo.bar")
+      user.save!
+      user.websites.delete(website)
+
+      user.websites.count.should == 0
+      Website.count.should == 1
+      User.first.websites.should == []
+    end
+  end
+
+  describe "has_website?" do
+    before(:each) do
+      @website = user.websites.create(name: "foo", url: "http://foo.bar")
+      user.save!
+    end
+
+    it { user.has_website?(website: @website).should == true }
+    it { user.has_website?(website: FactoryGirl.create(:website, name: "foo1")).should == false }
   end
 end

@@ -11,4 +11,8 @@ class User
   has_secure_password
 
   validates :email, presence: true
+
+  def has_website?(website:)
+    self.websites.where(id: website.id).first.present?
+  end
 end

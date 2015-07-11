@@ -13,14 +13,13 @@
   <tbody>
     <% @websites.each do |website| %>
       <tr>
-        <td><%= website.name %></td>
-        <td><%= website.url %></td>
+        <td><%= link_to website.name, post_path(id: website.latest_post.id) if website.latest_post %></td>
+        <td><%= link_to website.url, post_path(id: website.latest_post.id) if website.latest_post %></td>
         <td><%= website.images.count %></td>
-        <td><%= website_add_remove_link(website) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 <div>
-  <%= link_to "Browse websites", user_websites_path %>
+  <%= link_to "Manage websites", websites_path %>
 </div>

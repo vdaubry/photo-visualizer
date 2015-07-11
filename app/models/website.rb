@@ -8,5 +8,9 @@ class Website
   field :name, type: String
   field :url, type: String
 
-  validates :name, :url, presence: true
+  validates :name, :url, presence: true, uniqueness: true
+
+  def latest_post
+    @latest_post ||= posts.order("created_at DESC").first
+  end
 end

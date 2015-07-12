@@ -72,6 +72,11 @@ describe User do
       Website.count.should == 1
       User.first.websites.should == []
     end
+
+    it "has many user_posts" do
+      user_post = FactoryGirl.create(:user_post, user: user)
+      User.first.user_posts.should == [user_post]
+    end
   end
 
   describe "has_website?" do

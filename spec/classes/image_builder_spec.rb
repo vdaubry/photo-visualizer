@@ -82,9 +82,10 @@ describe "ImageBuilder" do
       end
     end
 
-    context "existing post" do
+    context "existing post with same url" do
       before(:each) do
-        @post = FactoryGirl.create(:post, url: "http://website.com/posts/foo")
+        website = FactoryGirl.create(:website, url: "http://website.com")
+        @post = FactoryGirl.create(:post, url: "http://website.com/posts/foo", website: website)
       end
 
       it "doesn't create any post" do
@@ -96,6 +97,54 @@ describe "ImageBuilder" do
       it "assigns image to existing post" do
         ImageBuilder.new(image_message_parser: parser).create
         Image.last.post.should == @post
+      end
+    end
+
+    context "existing post with same name for same website" do
+      before(:each) do
+        website = FactoryGirl.create(:website, url: "http://website.com")
+        @post = FactoryGirl.create(:post, name: "post_foo", website: website)
+      end
+
+      it "doesn't create any post" do
+        expect {
+          ImageBuilder.new(image_message_parser: parser).create
+        }.to change {Post.count}.by(0)
+      end
+
+      it "assigns image to existing post" do
+        ImageBuilder.new(image_message_parser: parser).create
+        Image.last.post.should == @post
+      end
+    end
+
+    context "receive another page for a similar post on the same website" do
+      before(:each) do
+        website = FactoryGirl.create(:website, url: "http://website.com")
+        @post = FactoryGirl.create(:post, url: "https://foo.com/posts/bar.html/limit:10", name: "post_bar", website: website)
+        parser.stubs(:post_url).returns("https://foo.com/posts/bar.html/limit:10/page:2")
+        parser.stubs(:post_name).returns("post_bar")
+      end
+
+      it "doesn't create new post" do
+        expect {
+          ImageBuilder.new(image_message_parser: parser).create
+          }.to change{Post.count}.by(0)
+      end
+    end
+
+    context "receive another page for a similar post on a different website" do
+      before(:each) do
+        other_website = FactoryGirl.create(:website, url: "http://other_website.com")
+        @post = FactoryGirl.create(:post, url: "https://foo.com/posts/bar.html/limit:10", name: "post_bar", website: other_website)
+        parser.stubs(:post_url).returns("https://foo.com/posts/bar.html/limit:10/page:2")
+        parser.stubs(:post_name).returns("post_bar")
+      end
+
+      it "creates new post" do
+        expect {
+          ImageBuilder.new(image_message_parser: parser).create
+        }.to change{Post.count}.by(1)
       end
     end
   end

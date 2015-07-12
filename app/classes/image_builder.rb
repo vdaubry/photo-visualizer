@@ -17,7 +17,8 @@ class ImageBuilder
   end
 
   def post
-    @post ||= Post.where(url: @parser.post_url).first || 
+    @post ||= website.posts.where(name: @parser.post_name).first ||
+              website.posts.where(url: @parser.post_url).first || 
               Post.create(name: @parser.post_name, url: @parser.post_url, website: website)
   end
 end

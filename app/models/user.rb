@@ -5,6 +5,7 @@ class User
 
   has_and_belongs_to_many :websites, inverse_of: nil
   has_many :user_posts
+  has_many :user_images
   
   field :email,               type: String
   field :password_digest,     type: String

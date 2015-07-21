@@ -5,8 +5,8 @@ class PostsController < ApplicationController
 
 
   def show
-    @posts = @website.posts
-    @images = @post.images.recent_last.page(params[:page]).per(50)
+    @presenter = UserPostDecorator.new(website: @website, user: current_user, post: @post, params: params)
+    @presenter.update_last_image_seen
   end
 
   private

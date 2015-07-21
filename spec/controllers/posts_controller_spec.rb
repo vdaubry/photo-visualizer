@@ -23,7 +23,7 @@ describe PostsController do
 
       it "assigns all posts" do
         get :show, id: @post.to_param
-        assigns(:posts).should == @posts
+        assigns(:presenter).posts.should == @posts
       end
 
       it "assigns post" do

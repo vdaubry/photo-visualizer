@@ -1,0 +1,12 @@
+.favorite {
+    color: yellow;
+    margin-left: 240px;
+}
+
+.grid.image {
+    height:250px;
+    width:250px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position:center;
+}

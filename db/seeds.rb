@@ -25,7 +25,7 @@ def create_images
   Image.destroy_all
   Post.each_with_index do |post, i|
     75.times do |i|
-      Image.create!(thumb_url: "http://www.thumb/#{post.id}/foo#{i}.com", target_url: "http://www.thumb/#{post.id}/foo#{i}.com", scrapped_at: (Time.now - i), post_id: post.id, website_id: post.website.id)
+      Image.create!(src: "http://placehold.it/300x300", href: "http://www.thumb/#{post.id}/foo#{i}.com", scrapped_at: (Time.now - i), post_id: post.id, website_id: post.website.id)
     end
   end
 end

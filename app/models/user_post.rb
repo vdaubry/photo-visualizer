@@ -1,7 +1,8 @@
 class UserPost
   include Mongoid::Document
-  belongs_to :user, index: true
-  belongs_to :post, index: true
+  belongs_to :user
+  belongs_to :post
+  index({ user_id: 1, post_id: 1 })
   
   field :last_image_scrapped_at,  type: DateTime
   

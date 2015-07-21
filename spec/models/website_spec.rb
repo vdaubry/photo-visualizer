@@ -41,6 +41,22 @@ describe Website do
       website.images.count.should == 2
       Website.first.images.count.should == 2
     end
+
+    it "cascades deletes posts" do
+      website.posts = FactoryGirl.create_list(:post, 2)
+      website.save
+
+      website.destroy
+      Post.count.should == 0
+    end
+
+    it "cascades deletes images" do
+      website.images = FactoryGirl.create_list(:image, 2)
+      website.save
+
+      website.destroy
+      Image.count.should == 0
+    end
   end
 
   describe "latest_post" do

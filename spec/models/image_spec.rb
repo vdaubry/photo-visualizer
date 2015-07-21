@@ -9,10 +9,15 @@ describe Image do
   end
   
   describe "validation" do
-    it { FactoryGirl.build(:image, thumb_url: nil).save.should == false }
-    it { FactoryGirl.build(:image, target_url: nil).save.should == false }
+    it { FactoryGirl.build(:image, src: nil).save.should == false }
+    it { FactoryGirl.build(:image, href: nil).save.should == true }
     it { FactoryGirl.build(:image, post: nil).save.should == false }
     it { FactoryGirl.build(:image, website: nil).save.should == false }
+
+    it "validates uniqueness of images" do
+      FactoryGirl.build(:image, src: "http://foo.bar/1.jpg").save.should == true
+      FactoryGirl.build(:image, src: "http://foo.bar/1.jpg").save.should == false
+    end
   end
 
   describe "relations" do

@@ -1,14 +1,14 @@
 <div class="row text-center">
-  <h3> <%= @post.name %></h3>
+  <h3> <%= link_to @post.name, @post.url %></h3>
 </div>
 <br>
 <div class="row">
   <div class="col-xs-3">
     <div class="panel panel-default">
       <ul class="list-group">
-        <% @posts.each do |post|%>
+        <% @presenter.posts.each do |post|%>
           <li class="list-group-item post">
-            <a href=""><%= post.name %></a>  
+            <%= link_to post.name, post %>
             <div class="row">
               <div class="col-xs-4">
                 <span class="label label-primary post-info" data-toggle="tooltip" data-placement="left" title="Number of images you have not seen in this post"><i class="fa fa-picture-o"></i> <%= post.images.count %></span>
@@ -17,21 +17,13 @@
           </li>
         <% end %>
       </ul>
-      <br>
+    </div>
+    <div class="text-center">
+      <%= paginate @presenter.posts, param_name: "post_page", theme: 'prev_next_only' %>
     </div>
   </div>
   <div class="col-xs-9">
-    <div class="row">
-      <div class="col-lg-4 col-sm-6 col-xs-12">
-        <% @images.each do |image| %>
-          <div class="panel panel-default">
-            <a href="">
-              <div style="background-image:url(<%= image.thumb_url %>)'}" class="background-img-responsive">
-              </div>
-            </a>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= render partial: "templates/images", locals: {images: @presenter.images, favorites: @presenter.favorites} %>
   </div>
+
 </div>

@@ -1,0 +1,24 @@
+<div class="row">
+<% images.each do |image| %>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+      <div class="panel panel-default">
+        <a href="">
+          <div class="grid image" style="background-image:url(<%= image.src %>);">
+            <% if favorites.include?(image.id) %>
+                <i class="fa fa-star fa-1 favorite"></i>
+            <% else %>
+                <i class="fa fa-star-o fa-1 favorite"></i>
+            <% end %>
+            <img src="" alt="">
+          </div>
+        </a>
+      </div>
+    </div>
+<% end %>
+</div>
+
+<div class="row">
+<div class="center-block">
+  <%= paginate images, param_name: "image_page" %>
+</div>
+</div>

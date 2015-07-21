@@ -3,7 +3,6 @@ require "rails_helper"
 describe "ImageBuilder" do
 
   let(:msg) { {"website": {
-                "name": "web_foo",
                 "url": "http://website.com"
                 },
                "post": {
@@ -11,8 +10,8 @@ describe "ImageBuilder" do
                 "url": "http://website.com/posts/foo"
                 },
                "image": {
-                "thumb_url": "http://images.com/thumbs/foo.jpg",
-                "target_url": "http://images.com/foo.jpg",
+                "src": "http://images.com/thumbs/foo.jpg",
+                "href": "http://images.com/foo.jpg",
                 "scrapped_at": Time.now.to_s
                 }}.to_json }
   let(:parser) { ImageMessageParser.new(msg) }
@@ -35,7 +34,7 @@ describe "ImageBuilder" do
       it "fills website" do
         ImageBuilder.new(image_message_parser: parser).create
         website = Website.last
-        website.name.should == "web_foo"
+        website.name.should == "http://website.com"
         website.url.should == "http://website.com"
       end
 

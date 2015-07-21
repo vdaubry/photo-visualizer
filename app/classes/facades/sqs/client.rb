@@ -1,7 +1,7 @@
 module Facades::SQS
   class Client
     def initialize(queue_name:)
-      return if ENV["APP_ENV"]=="test"
+      return if Rails.env.test?
       Aws.config.update({
         access_key_id: ENV['ACCESS_KEY_ID'],
         secret_access_key: ENV['SECRET_ACCESS_KEY'],
@@ -23,7 +23,7 @@ module Facades::SQS
     end
     
     def send(msg:)
-      return if ENV["APP_ENV"]=="test"
+      return if Rails.env.test?
       @sqs_client.send_message(queue_url: @queue_url,
                                 message_body: msg)
     end

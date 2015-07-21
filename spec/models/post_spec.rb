@@ -46,5 +46,13 @@ describe Post do
       post.images.count.should == 2
       Post.first.images.count.should == 2
     end
+
+    it "cascades deletes images" do
+      post.images = FactoryGirl.create_list(:image, 2)
+      post.save
+
+      post.destroy
+      Image.count.should == 0
+    end
   end
 end

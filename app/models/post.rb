@@ -3,7 +3,7 @@ class Post
   include Mongoid::Timestamps
   
   belongs_to :website, index: true
-  has_many :images
+  has_many :images, dependent: :destroy
   index({ created_at: 1 })
 
   field :name, type: String

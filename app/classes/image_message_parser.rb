@@ -1,5 +1,6 @@
 class ImageMessageParser < Struct.new(:msg)
   def website_name
+    byebug
     website["name"]
   end
 
@@ -16,11 +17,11 @@ class ImageMessageParser < Struct.new(:msg)
   end
 
   def image_thumb_url
-    image["thumb_url"]
+    image["src"]
   end
 
   def image_target_url
-    image["target_url"]
+    image["href"]
   end
 
   def image_scrapped_at

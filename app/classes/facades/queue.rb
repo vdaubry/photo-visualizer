@@ -9,9 +9,10 @@ module Facades
         yield msg
       end
     end
-    
+
+    #TODO: Call queue in a thread, use celluloid
     def send(msg:)
-      $LOG.debug "send #{msg}"
+      Rails.logger.debug "send #{msg}"
       @queue.send(msg: msg)
     end
   end

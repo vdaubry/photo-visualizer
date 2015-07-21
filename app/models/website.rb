@@ -2,8 +2,8 @@ class Website
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  has_many :posts
-  has_many :images
+  has_many :posts, dependent: :destroy
+  has_many :images, dependent: :destroy
 
   field :name, type: String
   field :url, type: String

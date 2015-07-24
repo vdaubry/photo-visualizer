@@ -30,12 +30,12 @@ class UserPostDecorator
     return @current_page if @current_page
     return 0 if user_post.last_image_scrapped_at.nil?
 
-    previous_images = @post.images.lte(scrapped_at: @user_post.last_image_scrapped_at)
+    previous_images = @post.images.lt(scrapped_at: @user_post.last_image_scrapped_at)
     @current_page = previous_images.count/per
   end
 
   def update_last_image_seen
-    user_post.update(last_image_scrapped_at: images.last.scrapped_at)
+    user_post.update(last_image_scrapped_at: images.last.scrapped_at) if images.present?
   end
 
   def user_post

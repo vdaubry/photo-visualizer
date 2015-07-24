@@ -23,7 +23,7 @@ class UserPostDecorator
   end
 
   def favorites
-    @user.user_images.in(id: images.map(&:id)).map(&:id)
+    @user.user_images.in(image_id: images.map(&:id)).map(&:id)
   end
 
   def current_page

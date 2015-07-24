@@ -42,6 +42,13 @@ describe PostsController do
         assigns(:presenter).images.all.should == @images
       end
 
+      it "assigns favorites" do
+        image = FactoryGirl.create(:image, post: @post)
+        favorite = FactoryGirl.create(:user_image, user: user, image: image)
+        get :show, id: @post.to_param
+        assigns(:presenter).favorites.should == [favorite.id]
+      end
+
       it "saves last image seen" do
         @images = FactoryGirl.create_list(:image, 2, post: @post)
         get :show, id: @post.to_param
